@@ -17,10 +17,12 @@ import { OrderHistoryView } from './OrderHistoryView';
 
 interface CustomerPortalProps {
   onSwitchToVendor?: () => void;
+  onSwitchToRider?: () => void;
 }
 
 export const CustomerPortal: React.FC<CustomerPortalProps> = ({
   onSwitchToVendor,
+  onSwitchToRider,
 }) => {
   const dispatch = useDispatch();
   const cart = useSelector((state: RootState) => state.cart);
@@ -71,6 +73,7 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({
         }}
         onGoOrders={() => setActiveView('orders')}
         onSwitchToVendor={onSwitchToVendor}
+        onSwitchToRider={onSwitchToRider}
         activeView={activeView}
         activeRestaurantName={selectedRestaurant?.name}
       />

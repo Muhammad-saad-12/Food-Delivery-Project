@@ -3,12 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { toggleCart } from '../../store/slices/cartSlice';
 import { logout, setCredentials } from '../../store/slices/authSlice';
-import { UtensilsCrossed, ShoppingBag, User, Package, Sparkles, ChefHat } from 'lucide-react';
+import { UtensilsCrossed, ShoppingBag, User, Package, Sparkles, ChefHat, Bike } from 'lucide-react';
 
 interface CustomerNavbarProps {
   onGoHome?: () => void;
   onGoOrders?: () => void;
   onSwitchToVendor?: () => void;
+  onSwitchToRider?: () => void;
   activeView?: 'discovery' | 'orders';
   activeRestaurantName?: string | null;
 }
@@ -17,6 +18,7 @@ export const CustomerNavbar: React.FC<CustomerNavbarProps> = ({
   onGoHome,
   onGoOrders,
   onSwitchToVendor,
+  onSwitchToRider,
   activeView = 'discovery',
   activeRestaurantName,
 }) => {
@@ -126,6 +128,19 @@ export const CustomerNavbar: React.FC<CustomerNavbarProps> = ({
             >
               <ChefHat className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Vendor Ops</span>
+            </button>
+          )}
+
+          {/* Switch to Rider Fleet Portal */}
+          {onSwitchToRider && (
+            <button
+              type="button"
+              onClick={onSwitchToRider}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-teal-500/30 bg-teal-500/10 hover:bg-teal-500/20 text-teal-300 font-bold text-xs transition"
+              title="Open Rider Fleet Dispatch & GPS Portal"
+            >
+              <Bike className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Rider Fleet</span>
             </button>
           )}
 

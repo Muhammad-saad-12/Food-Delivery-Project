@@ -12,6 +12,7 @@ import {
 import api from '../../services/api';
 import { InvoiceView } from './InvoiceView';
 import { ReviewModal } from '../../components/customer/ReviewModal';
+import { LiveTrackingModal } from './LiveTrackingModal';
 
 interface OrderHistoryViewProps {
   onBackToDiscovery: () => void;
@@ -31,6 +32,10 @@ export const OrderHistoryView: React.FC<OrderHistoryViewProps> = ({
   // Selected Order for Review
   const [reviewOrder, setReviewOrder] = useState<any | null>(null);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
+
+  // Selected Order for Live GPS Tracking
+  const [trackingOrder, setTrackingOrder] = useState<any | null>(null);
+  const [isTrackingOpen, setIsTrackingOpen] = useState(false);
 
   useEffect(() => {
     fetchOrders();
@@ -262,6 +267,21 @@ export const OrderHistoryView: React.FC<OrderHistoryViewProps> = ({
                 </div>
 
                 <div className="flex items-center gap-2">
+                  {/* Live GPS Tracking Button */}
+                  {['placed', 'confirmed', 'preparing', 'out_for_delivery'].includes(order.status) && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setTrackingOrder(order);
+                        setIsTrackingOpen(true);
+                      }}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-bold transition shadow-sm animate-pulse"
+                    >
+                      <Bike className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Track Rider GPS</span>
+                    </button>
+                  )}
+
                   {/* Review Button */}
                   <button
                     type="button"
@@ -301,6 +321,16 @@ export const OrderHistoryView: React.FC<OrderHistoryViewProps> = ({
         onClose={() => {
           setIsInvoiceOpen(false);
           setInvoiceOrder(null);
+        }}
+      />
+
+      {/* Live GPS Delivery Tracking Modal */}
+      <LiveTrackingModal
+        order={trackingOrder}
+        isOpen={isTrackingOpen}
+        onClose={() => {
+          setIsTrackingOpen(false);
+          setTrackingOrder(null);
         }}
       />
 

@@ -22,6 +22,19 @@ export interface IOrderItem {
   specialInstructions?: string;
 }
 
+export interface IRiderAssignment {
+  id: string;
+  name: string;
+  phone: string;
+  vehicle: string;
+  rating?: number;
+  assignedAt?: Date;
+  currentCoordinates?: {
+    lat: number;
+    lng: number;
+  };
+}
+
 export interface IOrder extends Document {
   orderNumber: string;
   restaurantId: Types.ObjectId | string;
@@ -39,6 +52,10 @@ export interface IOrder extends Document {
       lng: number;
     };
     specialNotes?: string;
+  };
+  pickupCoordinates?: {
+    lat: number;
+    lng: number;
   };
   payment: {
     method: 'cod' | 'jazzcash' | 'easypaisa';
@@ -58,9 +75,11 @@ export interface IOrder extends Document {
     | 'placed'
     | 'confirmed'
     | 'preparing'
+    | 'ready_for_pickup'
     | 'out_for_delivery'
     | 'delivered'
     | 'cancelled';
+  rider?: IRiderAssignment;
   items: IOrderItem[];
   timeline: Array<{
     status: string;
@@ -85,10 +104,14 @@ const orderSchema = new Schema<IOrder>(
       city: { type: String, required: true, default: 'Islamabad' },
       areaOrLandmark: { type: String, required: true },
       coordinates: {
-        lat: { type: Number },
-        lng: { type: Number },
+        lat: { type: Number, default: 33.7214 },
+        lng: { type: Number, default: 73.0560 },
       },
       specialNotes: { type: String },
+    },
+    pickupCoordinates: {
+      lat: { type: Number, default: 33.7083 },
+      lng: { type: Number, default: 73.0569 },
     },
     payment: {
       method: {
@@ -118,12 +141,25 @@ const orderSchema = new Schema<IOrder>(
         'placed',
         'confirmed',
         'preparing',
+        'ready_for_pickup',
         'out_for_delivery',
         'delivered',
         'cancelled',
       ],
       default: 'placed',
       index: true,
+    },
+    rider: {
+      id: { type: String },
+      name: { type: String },
+      phone: { type: String },
+      vehicle: { type: String },
+      rating: { type: Number, default: 4.9 },
+      assignedAt: { type: Date },
+      currentCoordinates: {
+        lat: { type: Number },
+        lng: { type: Number },
+      },
     },
     items: [
       {

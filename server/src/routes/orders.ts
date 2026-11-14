@@ -279,3 +279,144 @@ orderRouter.patch(
     }
   }
 );
+
+// POST /api/orders/:id/accept-rider - Direct Delivery Acceptance by Rider
+orderRouter.post('/:id/accept-rider', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const { rider } = req.body;
+
+    if (!rider || !rider.name || !rider.phone) {
+      res.status(400).json({ error: 'Rider details (name, phone) are required' });
+      return;
+    }
+
+    const isConnected = mongoose.connection.readyState === 1;
+    const riderData = {
+      id: rider.id || `rider-${Date.now()}`,
+      name: rider.name,
+      phone: rider.phone,
+      vehicle: rider.vehicle || 'Honda CD70 Motorbike',
+      rating: rider.rating || 4.9,
+      assignedAt: new Date(),
+      currentCoordinates: rider.currentCoordinates || { lat: 33.7083, lng: 73.0569 },
+    };
+
+    const timelineEvent = {
+      status: 'out_for_delivery',
+      timestamp: new Date(),
+      note: `Delivery assigned to rider ${riderData.name} (${riderData.vehicle}). En route for delivery.`,
+    };
+
+    if (!isConnected) {
+      const order = inMemoryOrders.find(
+        (o) => o._id === id || o.orderNumber === id
+      );
+      if (!order) {
+        res.status(404).json({ error: 'Order not found' });
+        return;
+      }
+
+      order.rider = riderData;
+      order.status = 'out_for_delivery';
+      order.timeline.push(timelineEvent);
+      order.updatedAt = new Date().toISOString();
+
+      try {
+        const io = getIO();
+        io.to(`order_${order.orderNumber}`).to('kitchen').to('riders').emit('order_status_update', {
+          orderNumber: order.orderNumber,
+          status: 'out_for_delivery',
+          timeline: order.timeline,
+          rider: riderData,
+        });
+      } catch {}
+
+      res.status(200).json({
+        message: 'Order accepted by rider successfully',
+        order,
+      });
+      return;
+    }
+
+    const order = await Order.findOne({
+      $or: [
+        mongoose.isValidObjectId(id) ? { _id: id } : { orderNumber: id },
+        { orderNumber: id },
+      ],
+    });
+
+    if (!order) {
+      res.status(404).json({ error: 'Order not found' });
+      return;
+    }
+
+    order.rider = riderData;
+    order.status = 'out_for_delivery';
+    order.timeline.push(timelineEvent);
+    await order.save();
+
+    try {
+      const io = getIO();
+      io.to(`order_${order.orderNumber}`).to('kitchen').to('riders').emit('order_status_update', {
+        orderNumber: order.orderNumber,
+        status: 'out_for_delivery',
+        timeline: order.timeline,
+        rider: riderData,
+      });
+    } catch {}
+
+    res.status(200).json({
+      message: 'Order accepted by rider successfully',
+      order,
+    });
+  } catch (error) {
+    console.error('Error in rider order acceptance:', error);
+    res.status(500).json({ error: 'Failed to accept order' });
+  }
+});
+
+// POST /api/orders/:id/rider-location - Real-time location beacon
+orderRouter.post('/:id/rider-location', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const { coordinates, etaMinutes, heading, distanceRemainingKm } = req.body;
+
+    if (!coordinates?.lat || !coordinates?.lng) {
+      res.status(400).json({ error: 'Valid latitude and longitude are required' });
+      return;
+    }
+
+    const isConnected = mongoose.connection.readyState === 1;
+
+    if (!isConnected) {
+      const order = inMemoryOrders.find(
+        (o) => o._id === id || o.orderNumber === id
+      );
+      if (order && order.rider) {
+        order.rider.currentCoordinates = coordinates;
+      }
+    } else {
+      await Order.findOneAndUpdate(
+        { $or: [mongoose.isValidObjectId(id) ? { _id: id } : { orderNumber: id }, { orderNumber: id }] },
+        { $set: { 'rider.currentCoordinates': coordinates } }
+      );
+    }
+
+    // Broadcast live location to Socket.IO
+    try {
+      getIO().to(`order_${id}`).emit('live_rider_location', {
+        orderNumber: id,
+        coordinates,
+        etaMinutes,
+        heading,
+        distanceRemainingKm,
+      });
+    } catch {}
+
+    res.status(200).json({ message: 'Rider location broadcasted' });
+  } catch (error) {
+    console.error('Error broadcasting rider location:', error);
+    res.status(500).json({ error: 'Failed to broadcast location' });
+  }
+});

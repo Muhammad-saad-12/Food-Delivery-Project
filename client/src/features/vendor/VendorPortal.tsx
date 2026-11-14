@@ -16,10 +16,12 @@ import { RestaurantItem } from '../customer/CustomerDiscovery';
 
 interface VendorPortalProps {
   onSwitchToCustomer: () => void;
+  onSwitchToRider?: () => void;
 }
 
 export const VendorPortal: React.FC<VendorPortalProps> = ({
   onSwitchToCustomer,
+  onSwitchToRider,
 }) => {
   const [activeTab, setActiveTab] = useState<'orders' | 'menu' | 'settings'>('orders');
   const [restaurants, setRestaurants] = useState<RestaurantItem[]>([]);
@@ -94,6 +96,18 @@ export const VendorPortal: React.FC<VendorPortalProps> = ({
                   ))}
                 </select>
               </div>
+            )}
+
+            {/* Switch to Rider Fleet */}
+            {onSwitchToRider && (
+              <button
+                type="button"
+                onClick={onSwitchToRider}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-xs font-bold text-emerald-300 transition shadow-sm"
+                title="Switch to rider fleet delivery view"
+              >
+                <span>Rider Fleet</span>
+              </button>
             )}
 
             {/* Switch to Customer Portal Mode */}
