@@ -1,0 +1,71 @@
+import React, { useState } from 'react';
+import { CustomerNavbar } from './CustomerNavbar';
+import { CustomerDiscovery, RestaurantItem } from './CustomerDiscovery';
+import { RestaurantDetail } from './RestaurantDetail';
+import {
+  FoodCustomizationModal,
+  MenuItemOption,
+} from '../../components/customer/FoodCustomizationModal';
+import { CartDrawer } from '../../components/customer/CartDrawer';
+import { AIChatWidget } from '../../components/chat/AIChatWidget';
+
+export const CustomerPortal: React.FC = () => {
+  const [selectedRestaurant, setSelectedRestaurant] =
+    useState<RestaurantItem | null>(null);
+  const [customizingItem, setCustomizingItem] =
+    useState<MenuItemOption | null>(null);
+  const [isCustomizationOpen, setIsCustomizationOpen] = useState(false);
+
+  const handleOpenCustomization = (item: MenuItemOption) => {
+    setCustomizingItem(item);
+    setIsCustomizationOpen(true);
+  };
+
+  const handleCloseCustomization = () => {
+    setIsCustomizationOpen(false);
+    setCustomizingItem(null);
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-slate-950">
+      {/* Top Customer Navigation */}
+      <CustomerNavbar
+        onGoHome={() => setSelectedRestaurant(null)}
+        activeRestaurantName={selectedRestaurant?.name}
+      />
+
+      {/* Main Content Area */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+        {selectedRestaurant ? (
+          <RestaurantDetail
+            restaurant={selectedRestaurant}
+            onBack={() => setSelectedRestaurant(null)}
+            onSelectItemForCustomization={handleOpenCustomization}
+          />
+        ) : (
+          <CustomerDiscovery
+            onSelectRestaurant={(restaurant) => setSelectedRestaurant(restaurant)}
+          />
+        )}
+      </main>
+
+      {/* Food Customization Modal */}
+      <FoodCustomizationModal
+        item={customizingItem}
+        isOpen={isCustomizationOpen}
+        onClose={handleCloseCustomization}
+      />
+
+      {/* Persistent Shopping Cart Slide-over Drawer */}
+      <CartDrawer />
+
+      {/* Lightweight Floating AI Chat Assistant */}
+      <AIChatWidget
+        onSelectItemForCustomization={handleOpenCustomization}
+        restaurantId={selectedRestaurant?._id}
+      />
+    </div>
+  );
+};
+
+export default CustomerPortal;
