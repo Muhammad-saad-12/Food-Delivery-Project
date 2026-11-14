@@ -124,7 +124,7 @@ export const RestaurantDetail: React.FC<RestaurantDetailProps> = ({
         </div>
 
         {/* Restaurant Profile Content */}
-        <div className="p-6 sm:p-8 -mt-20 relative z-10 space-y-4">
+        <div className="p-5 sm:p-8 -mt-16 sm:-mt-20 relative z-10 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div className="space-y-2">
               <div className="flex flex-wrap items-center gap-2">
@@ -156,9 +156,9 @@ export const RestaurantDetail: React.FC<RestaurantDetailProps> = ({
             </div>
 
             {/* Quick Metrics & Leave Review Action */}
-            <div className="flex flex-wrap items-center gap-3 bg-slate-900/90 border border-slate-800 p-3 rounded-2xl backdrop-blur-md self-start sm:self-auto shrink-0 shadow-lg">
-              <div className="text-center px-2">
-                <div className="flex items-center gap-1 text-sm font-bold text-amber-400">
+            <div className="grid grid-cols-3 sm:flex sm:items-center gap-2 sm:gap-3 bg-slate-900/90 border border-slate-800 p-3 rounded-2xl backdrop-blur-md w-full sm:w-auto shrink-0 shadow-lg">
+              <div className="text-center px-1 sm:px-2">
+                <div className="flex items-center justify-center gap-1 text-sm font-bold text-amber-400">
                   <Star className="w-4 h-4 fill-amber-400" />
                   <span>{restaurant.rating.toFixed(1)}</span>
                 </div>
@@ -166,17 +166,17 @@ export const RestaurantDetail: React.FC<RestaurantDetailProps> = ({
                   {restaurant.reviewCount} reviews
                 </span>
               </div>
-              <div className="h-7 w-px bg-slate-800" />
-              <div className="text-center px-2">
-                <div className="flex items-center gap-1 text-sm font-bold text-white">
+              <div className="hidden sm:block h-7 w-px bg-slate-800" />
+              <div className="text-center px-1 sm:px-2">
+                <div className="flex items-center justify-center gap-1 text-sm font-bold text-white">
                   <Clock className="w-4 h-4 text-emerald-400" />
                   <span>{restaurant.deliveryTimeMin} min</span>
                 </div>
                 <span className="text-[10px] text-slate-400">Delivery Time</span>
               </div>
-              <div className="h-7 w-px bg-slate-800" />
-              <div className="text-center px-2">
-                <div className="flex items-center gap-1 text-sm font-bold text-white">
+              <div className="hidden sm:block h-7 w-px bg-slate-800" />
+              <div className="text-center px-1 sm:px-2">
+                <div className="flex items-center justify-center gap-1 text-sm font-bold text-white">
                   <Bike className="w-4 h-4 text-emerald-400" />
                   <span>{formatPKR(restaurant.deliveryFee)}</span>
                 </div>
@@ -186,7 +186,7 @@ export const RestaurantDetail: React.FC<RestaurantDetailProps> = ({
               <button
                 type="button"
                 onClick={() => handleOpenReview()}
-                className="ml-2 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500 text-amber-300 hover:text-slate-950 font-bold text-xs border border-amber-500/20 transition"
+                className="col-span-3 sm:ml-2 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500 text-amber-300 hover:text-slate-950 font-bold text-xs border border-amber-500/20 transition mt-2 sm:mt-0"
               >
                 <MessageSquarePlus className="w-3.5 h-3.5" />
                 <span>Write Review</span>
@@ -220,7 +220,7 @@ export const RestaurantDetail: React.FC<RestaurantDetailProps> = ({
       {/* Sticky Category & Search Navigation Bar */}
       <div className="sticky top-16 z-30 bg-slate-950/90 backdrop-blur-md border border-slate-800 rounded-2xl p-3 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-3">
         {/* Category Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 custom-scrollbar">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none -mx-1 md:mx-0 px-1 md:px-0">
           {categories.map((category) => {
             const isSelected = selectedCategory === category;
             return (
@@ -228,7 +228,7 @@ export const RestaurantDetail: React.FC<RestaurantDetailProps> = ({
                 key={category}
                 type="button"
                 onClick={() => setSelectedCategory(category)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition border ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap shrink-0 transition border ${
                   isSelected
                     ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-md shadow-emerald-500/20'
                     : 'bg-slate-900 text-slate-300 border-slate-800 hover:border-slate-700'
@@ -241,7 +241,7 @@ export const RestaurantDetail: React.FC<RestaurantDetailProps> = ({
         </div>
 
         {/* Menu Search Input */}
-        <div className="relative flex items-center bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 min-w-[220px]">
+        <div className="relative flex items-center bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 w-full md:w-64">
           <Search className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
           <input
             type="text"
@@ -370,7 +370,7 @@ export const RestaurantDetail: React.FC<RestaurantDetailProps> = ({
                       </div>
 
                       {/* Right: Dish Image Thumbnail */}
-                      <div className="relative w-full sm:w-28 sm:h-28 h-40 rounded-xl overflow-hidden bg-slate-950 shrink-0">
+                      <div className="relative w-full sm:w-28 sm:h-28 h-40 rounded-xl overflow-hidden bg-slate-950 shrink-0 order-first sm:order-last">
                         <img
                           src={item.image}
                           alt={item.name}

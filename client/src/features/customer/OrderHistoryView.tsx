@@ -262,12 +262,12 @@ export const OrderHistoryView: React.FC<OrderHistoryViewProps> = ({
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-slate-800/80">
                 <div className="text-[11px] text-slate-400 font-mono">
                   Recipient: {order.customerName} ({order.customerPhone})
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                   {/* Live GPS Tracking Button */}
                   {['placed', 'confirmed', 'preparing', 'out_for_delivery'].includes(order.status) && (
                     <button
@@ -276,7 +276,7 @@ export const OrderHistoryView: React.FC<OrderHistoryViewProps> = ({
                         setTrackingOrder(order);
                         setIsTrackingOpen(true);
                       }}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-bold transition shadow-sm animate-pulse"
+                      className="flex-1 sm:flex-initial justify-center flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-bold transition shadow-sm animate-pulse"
                     >
                       <Bike className="w-3.5 h-3.5 text-emerald-400" />
                       <span>Track Rider GPS</span>
@@ -290,7 +290,7 @@ export const OrderHistoryView: React.FC<OrderHistoryViewProps> = ({
                       setReviewOrder(order);
                       setIsReviewOpen(true);
                     }}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 text-amber-300 hover:bg-amber-500 hover:text-slate-950 border border-amber-500/20 text-xs font-bold transition"
+                    className="flex-1 sm:flex-initial justify-center flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 text-amber-300 hover:bg-amber-500 hover:text-slate-950 border border-amber-500/20 text-xs font-bold transition"
                   >
                     <Star className="w-3.5 h-3.5 fill-amber-400" />
                     <span>Rate Meal</span>
@@ -303,10 +303,10 @@ export const OrderHistoryView: React.FC<OrderHistoryViewProps> = ({
                       setInvoiceOrder(order);
                       setIsInvoiceOpen(true);
                     }}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition"
+                    className="flex-1 sm:flex-initial justify-center flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition"
                   >
                     <Receipt className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>View Tax Invoice</span>
+                    <span>Tax Invoice</span>
                   </button>
                 </div>
               </div>
