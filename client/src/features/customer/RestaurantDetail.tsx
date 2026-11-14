@@ -10,10 +10,12 @@ import {
   Plus,
   Flame,
   Utensils,
+  MessageSquarePlus,
 } from 'lucide-react';
 import api from '../../services/api';
 import { RestaurantItem } from './CustomerDiscovery';
 import { MenuItemOption } from '../../components/customer/FoodCustomizationModal';
+import { ReviewModal } from '../../components/customer/ReviewModal';
 
 interface RestaurantDetailProps {
   restaurant: RestaurantItem;
@@ -32,8 +34,17 @@ export const RestaurantDetail: React.FC<RestaurantDetailProps> = ({
   const [menuSearch, setMenuSearch] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
 
+  // Reviews State
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [reviewTargetDish, setReviewTargetDish] = useState<{
+    dishName?: string;
+    menuItemId?: string;
+  }>({});
+
   useEffect(() => {
     fetchRestaurantMenu();
+    fetchRestaurantReviews();
   }, [restaurant._id]);
 
   const fetchRestaurantMenu = async () => {
@@ -56,6 +67,22 @@ export const RestaurantDetail: React.FC<RestaurantDetailProps> = ({
     }
   };
 
+  const fetchRestaurantReviews = async () => {
+    try {
+      const res = await api.get('/reviews', {
+        params: { restaurantId: restaurant._id },
+      });
+      setReviews(res.data.reviews || []);
+    } catch (err) {
+      console.error('Failed to fetch reviews:', err);
+    }
+  };
+
+  const handleOpenReview = (dishName?: string, menuItemId?: string) => {
+    setReviewTargetDish({ dishName, menuItemId });
+    setIsReviewModalOpen(true);
+  };
+
   // Filter items by category and search
   const filteredItems = menuItems.filter((item) => {
     const matchesCategory =
@@ -67,7 +94,6 @@ export const RestaurantDetail: React.FC<RestaurantDetailProps> = ({
     return matchesCategory && matchesSearch;
   });
 
-  // Group displayed items by category
   const categoriesToDisplay =
     selectedCategory === 'All'
       ? categories.filter((c) => c !== 'All')
@@ -128,8 +154,8 @@ export const RestaurantDetail: React.FC<RestaurantDetailProps> = ({
               </p>
             </div>
 
-            {/* Quick Metrics */}
-            <div className="flex items-center gap-3 bg-slate-900/90 border border-slate-800 p-3 rounded-2xl backdrop-blur-md self-start sm:self-auto shrink-0 shadow-lg">
+            {/* Quick Metrics & Leave Review Action */}
+            <div className="flex flex-wrap items-center gap-3 bg-slate-900/90 border border-slate-800 p-3 rounded-2xl backdrop-blur-md self-start sm:self-auto shrink-0 shadow-lg">
               <div className="text-center px-2">
                 <div className="flex items-center gap-1 text-sm font-bold text-amber-400">
                   <Star className="w-4 h-4 fill-amber-400" />
@@ -155,6 +181,15 @@ export const RestaurantDetail: React.FC<RestaurantDetailProps> = ({
                 </div>
                 <span className="text-[10px] text-slate-400">Delivery Fee</span>
               </div>
+
+              <button
+                type="button"
+                onClick={() => handleOpenReview()}
+                className="ml-2 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500 text-amber-300 hover:text-slate-950 font-bold text-xs border border-amber-500/20 transition"
+              >
+                <MessageSquarePlus className="w-3.5 h-3.5" />
+                <span>Write Review</span>
+              </button>
             </div>
           </div>
 
@@ -304,20 +339,32 @@ export const RestaurantDetail: React.FC<RestaurantDetailProps> = ({
                           )}
                         </div>
 
-                        {/* Price and Action */}
+                        {/* Price and Action Buttons */}
                         <div className="flex items-center justify-between pt-2">
                           <span className="text-base font-extrabold text-white font-mono">
                             ${item.price.toFixed(2)}
                           </span>
 
-                          <button
-                            type="button"
-                            onClick={() => onSelectItemForCustomization(item)}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-slate-950 font-semibold text-xs border border-emerald-500/20 hover:border-emerald-500 transition shadow-sm"
-                          >
-                            <Plus className="w-3.5 h-3.5" />
-                            Customize & Add
-                          </button>
+                          <div className="flex items-center gap-2">
+                            {/* Dish Review Shortcut */}
+                            <button
+                              type="button"
+                              onClick={() => handleOpenReview(item.name, item._id)}
+                              className="p-1.5 rounded-xl border border-slate-800 text-slate-400 hover:text-amber-400 hover:bg-slate-800 transition"
+                              title="Rate this dish"
+                            >
+                              <Star className="w-4 h-4" />
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => onSelectItemForCustomization(item)}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-slate-950 font-semibold text-xs border border-emerald-500/20 hover:border-emerald-500 transition shadow-sm"
+                            >
+                              <Plus className="w-3.5 h-3.5" />
+                              Customize & Add
+                            </button>
+                          </div>
                         </div>
                       </div>
 
@@ -337,6 +384,85 @@ export const RestaurantDetail: React.FC<RestaurantDetailProps> = ({
           })}
         </div>
       )}
+
+      {/* Customer Reviews & Dish Ratings Section */}
+      {reviews.length > 0 && (
+        <div className="space-y-4 pt-6 border-t border-slate-800/80">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
+              <h2 className="text-lg font-bold text-white tracking-tight">
+                Verified Customer Reviews
+              </h2>
+              <span className="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-mono">
+                {reviews.length}
+              </span>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => handleOpenReview()}
+              className="text-xs font-bold text-amber-400 hover:text-amber-300"
+            >
+              + Add Your Review
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {reviews.map((rev) => (
+              <div
+                key={rev._id}
+                className="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 space-y-2.5"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="text-xs font-bold text-white">
+                      {rev.customerName}
+                    </h4>
+                    {rev.dishName && (
+                      <span className="text-[11px] text-emerald-400 font-semibold">
+                        Reviewed: {rev.dishName}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1 text-amber-400 font-bold text-xs">
+                    <Star className="w-3.5 h-3.5 fill-amber-400" />
+                    <span>{rev.rating}.0</span>
+                  </div>
+                </div>
+
+                <p className="text-xs text-slate-300 leading-relaxed italic">
+                  "{rev.comment}"
+                </p>
+
+                {rev.tags && rev.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1 pt-1">
+                    {rev.tags.map((t: string) => (
+                      <span
+                        key={t}
+                        className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Review Modal */}
+      <ReviewModal
+        isOpen={isReviewModalOpen}
+        onClose={() => setIsReviewModalOpen(false)}
+        restaurantId={restaurant._id}
+        restaurantName={restaurant.name}
+        dishName={reviewTargetDish.dishName}
+        menuItemId={reviewTargetDish.menuItemId}
+        onReviewSubmitted={() => fetchRestaurantReviews()}
+      />
     </div>
   );
 };

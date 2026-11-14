@@ -3,15 +3,19 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { toggleCart } from '../../store/slices/cartSlice';
 import { logout, setCredentials } from '../../store/slices/authSlice';
-import { UtensilsCrossed, ShoppingBag, User, Sparkles } from 'lucide-react';
+import { UtensilsCrossed, ShoppingBag, User, Package, Sparkles } from 'lucide-react';
 
 interface CustomerNavbarProps {
   onGoHome?: () => void;
+  onGoOrders?: () => void;
+  activeView?: 'discovery' | 'orders';
   activeRestaurantName?: string | null;
 }
 
 export const CustomerNavbar: React.FC<CustomerNavbarProps> = ({
   onGoHome,
+  onGoOrders,
+  activeView = 'discovery',
   activeRestaurantName,
 }) => {
   const dispatch = useDispatch();
@@ -28,9 +32,9 @@ export const CustomerNavbar: React.FC<CustomerNavbarProps> = ({
         setCredentials({
           user: {
             id: 'cust-101',
-            name: 'Sarah Connor',
-            email: 'sarah@example.com',
-            role: 'waiter', // demo user
+            name: 'Saad Khan',
+            email: 'saad@example.pk',
+            role: 'waiter', // demo customer user
           },
           token: 'demo-jwt-customer-token',
         })
@@ -55,7 +59,7 @@ export const CustomerNavbar: React.FC<CustomerNavbarProps> = ({
                 GourmetOS
               </span>
               <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                Customer
+                Pakistan
               </span>
             </div>
             {activeRestaurantName && (
@@ -66,23 +70,50 @@ export const CustomerNavbar: React.FC<CustomerNavbarProps> = ({
           </div>
         </div>
 
-        {/* Center Navigation Actions */}
-        <nav className="hidden md:flex items-center gap-6 text-xs font-medium text-slate-300">
+        {/* Center Navigation Links */}
+        <nav className="hidden md:flex items-center gap-4 text-xs font-medium">
           <button
             onClick={onGoHome}
-            className="hover:text-emerald-400 transition"
+            className={`px-3 py-1.5 rounded-xl transition ${
+              activeView === 'discovery'
+                ? 'bg-emerald-500/10 text-emerald-400 font-bold border border-emerald-500/20'
+                : 'text-slate-300 hover:text-white'
+            }`}
           >
             Discover Restaurants
           </button>
+
+          <button
+            onClick={onGoOrders}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition ${
+              activeView === 'orders'
+                ? 'bg-emerald-500/10 text-emerald-400 font-bold border border-emerald-500/20'
+                : 'text-slate-300 hover:text-white'
+            }`}
+          >
+            <Package className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Orders & Tax Invoices</span>
+          </button>
+
           <span className="text-slate-700">•</span>
-          <span className="inline-flex items-center gap-1 text-slate-400">
+          <span className="inline-flex items-center gap-1 text-[11px] text-slate-400">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            AI Chef Recommendations Active
+            JazzCash • EasyPaisa • COD
           </span>
         </nav>
 
         {/* Right Actions */}
         <div className="flex items-center gap-3">
+          {/* Mobile Orders button */}
+          <button
+            type="button"
+            onClick={onGoOrders}
+            className="md:hidden p-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-300 hover:text-white"
+            title="My Orders"
+          >
+            <Package className="w-4 h-4 text-emerald-400" />
+          </button>
+
           {/* User Profile toggle */}
           <button
             type="button"

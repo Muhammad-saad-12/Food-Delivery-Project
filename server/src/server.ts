@@ -10,6 +10,8 @@ import { authRouter } from './routes/auth.js';
 import { restaurantRouter } from './routes/restaurants.js';
 import { menuRouter } from './routes/menu.js';
 import { aiRouter } from './routes/ai.js';
+import { orderRouter } from './routes/orders.js';
+import { reviewRouter } from './routes/reviews.js';
 import { seedDatabaseIfEmpty } from './utils/seedData.js';
 
 // Load environment variables
@@ -38,6 +40,8 @@ app.use('/api/auth', authRouter);
 app.use('/api/restaurants', restaurantRouter);
 app.use('/api/menu', menuRouter);
 app.use('/api/ai', aiRouter);
+app.use('/api/orders', orderRouter);
+app.use('/api/reviews', reviewRouter);
 
 // 404 Handler
 app.use((_req: Request, res: Response) => {

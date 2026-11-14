@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import {
@@ -17,24 +17,26 @@ import {
   Sparkles,
   ArrowRight,
   ShieldCheck,
-  CheckCircle,
 } from 'lucide-react';
 
-export const CartDrawer: React.FC = () => {
+interface CartDrawerProps {
+  onProceedToCheckout?: () => void;
+}
+
+export const CartDrawer: React.FC<CartDrawerProps> = ({
+  onProceedToCheckout,
+}) => {
   const dispatch = useDispatch();
   const cart = useSelector((state: RootState) => state.cart);
-  const [checkoutComplete, setCheckoutComplete] = useState(false);
 
   const isOpen = cart.isOpen;
   const itemCount = cart.items.reduce((sum, item) => sum + item.quantity, 0);
 
-  const handleCheckout = () => {
-    setCheckoutComplete(true);
-    setTimeout(() => {
-      dispatch(clearCart());
-      setCheckoutComplete(false);
-      dispatch(toggleCart(false));
-    }, 2500);
+  const handleCheckoutClick = () => {
+    dispatch(toggleCart(false));
+    if (onProceedToCheckout) {
+      onProceedToCheckout();
+    }
   };
 
   if (!isOpen) return null;
@@ -86,17 +88,7 @@ export const CartDrawer: React.FC = () => {
 
           {/* Cart Content */}
           <div className="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar">
-            {checkoutComplete ? (
-              <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-4 animate-in zoom-in-95">
-                <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center">
-                  <CheckCircle className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-bold text-white">Order Received!</h3>
-                <p className="text-xs text-slate-400 max-w-xs leading-relaxed">
-                  Your order is being prepped in the kitchen. Tracking and live status have been initiated.
-                </p>
-              </div>
-            ) : cart.items.length === 0 ? (
+            {cart.items.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-3">
                 <div className="w-16 h-16 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-500">
                   <ShoppingBag className="w-8 h-8" />
@@ -235,8 +227,8 @@ export const CartDrawer: React.FC = () => {
             )}
           </div>
 
-          {/* Cart Footer Breakdown (only if items present and not completed) */}
-          {cart.items.length > 0 && !checkoutComplete && (
+          {/* Cart Footer Breakdown */}
+          {cart.items.length > 0 && (
             <div className="p-5 bg-slate-950 border-t border-slate-800 space-y-4 shrink-0">
               {/* Tip Selection */}
               <div>
@@ -294,15 +286,15 @@ export const CartDrawer: React.FC = () => {
                 </div>
               </div>
 
-              {/* Place Order CTA */}
+              {/* Proceed to Checkout CTA */}
               <button
                 type="button"
-                onClick={handleCheckout}
+                onClick={handleCheckoutClick}
                 className="w-full bg-emerald-500 hover:bg-emerald-600 active:scale-[0.99] text-slate-950 font-bold py-3 px-4 rounded-xl transition shadow-lg shadow-emerald-500/20 flex items-center justify-between text-sm"
               >
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-slate-950" />
-                  <span>Place Order</span>
+                  <span>Proceed to Delivery & Payment</span>
                 </div>
                 <div className="flex items-center gap-1 font-mono">
                   <span>${cart.total.toFixed(2)}</span>
