@@ -3,11 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { toggleCart } from '../../store/slices/cartSlice';
 import { logout, setCredentials } from '../../store/slices/authSlice';
-import { UtensilsCrossed, ShoppingBag, User, Package, Sparkles } from 'lucide-react';
+import { UtensilsCrossed, ShoppingBag, User, Package, Sparkles, ChefHat } from 'lucide-react';
 
 interface CustomerNavbarProps {
   onGoHome?: () => void;
   onGoOrders?: () => void;
+  onSwitchToVendor?: () => void;
   activeView?: 'discovery' | 'orders';
   activeRestaurantName?: string | null;
 }
@@ -15,6 +16,7 @@ interface CustomerNavbarProps {
 export const CustomerNavbar: React.FC<CustomerNavbarProps> = ({
   onGoHome,
   onGoOrders,
+  onSwitchToVendor,
   activeView = 'discovery',
   activeRestaurantName,
 }) => {
@@ -113,6 +115,19 @@ export const CustomerNavbar: React.FC<CustomerNavbarProps> = ({
           >
             <Package className="w-4 h-4 text-emerald-400" />
           </button>
+
+          {/* Switch to Vendor Ops Portal */}
+          {onSwitchToVendor && (
+            <button
+              type="button"
+              onClick={onSwitchToVendor}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 font-bold text-xs transition"
+              title="Open Merchant Kitchen & Menu Manager"
+            >
+              <ChefHat className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Vendor Ops</span>
+            </button>
+          )}
 
           {/* User Profile toggle */}
           <button

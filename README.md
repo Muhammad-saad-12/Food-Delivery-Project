@@ -12,13 +12,14 @@ Restaurant-management-system/
 │   ├── src/
 │   │   ├── components/        # Reusable UI components
 │   │   │   ├── chat/          # AIChatWidget (Floating AI concierge)
-│   │   │   └── customer/      # FoodCustomizationModal & CartDrawer
-│   │   ├── features/          # Customer portal feature views
-│   │   │   └── customer/      # CustomerDiscovery, RestaurantDetail, CustomerNavbar
+│   │   │   └── customer/      # FoodCustomizationModal, CartDrawer & ReviewModal
+│   │   ├── features/          # Customer & Vendor portal feature views
+│   │   │   ├── customer/      # CustomerDiscovery, RestaurantDetail, CheckoutModal, InvoiceView
+│   │   │   └── vendor/        # VendorPortal, LiveOrders, MenuManagement, VendorSettings
 │   │   ├── store/             # Redux Toolkit & Persist (authSlice, cartSlice)
 │   │   ├── services/          # Axios HTTP & Socket.IO client instances
-│   │   ├── App.tsx            # Main layout rendering CustomerPortal
-│   │   ├── index.css          # Tailwind CSS 4 theme imports
+│   │   ├── App.tsx            # Main layout with Diner / Vendor Portal switcher
+│   │   ├── index.css          # Tailwind CSS 4 theme & Leaflet map styling
 │   │   └── main.tsx           # React 18 root with Redux Provider & PersistGate
 │   ├── .env.example           # Client baseline environment template
 │   ├── .env                   # Client local environment configuration
@@ -85,6 +86,15 @@ npm run dev:client
 # Compile both builds
 npm run build
 ```
+
+---
+
+## 👨‍🍳 Vendor & Kitchen Operations Portal
+
+- **Live Kitchen Order Stream**: Real-time incoming order pipeline powered by Socket.IO with audio synth alert chime, visual flashing banners, and stage-by-stage progression (*Pending Acceptance -> Confirmed -> Preparing in Kitchen -> Out with Rider -> Delivered*).
+- **Live Sales & Volume Monitoring**: Real-time daily gross volume ($), active kitchen workload, total orders counter, and average prep time tracker.
+- **AI-Assisted Menu Management**: Full food item CRUD with an **AI Description & Tag Generator** (`POST /api/ai/generate-menu-item`). Vendors type a dish name and receive rich culinary copywriting, suggested category, dietary tags, spice profiles, portion sizes, and add-ons.
+- **Vendor Onboarding & Operating Schedules**: Comprehensive management of restaurant profile, cuisines, weekly open/close schedules, delivery fee / minimum order rules, and Pakistani city location settings.
 
 ---
 

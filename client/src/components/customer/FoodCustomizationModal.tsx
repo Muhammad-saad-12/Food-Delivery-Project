@@ -14,6 +14,7 @@ export interface MenuItemOption {
   category: string;
   image: string;
   popular?: boolean;
+  isAvailable?: boolean;
   dietaryTags?: string[];
   spiceLevels?: string[];
   sizes?: Array<{ id: string; name: string; priceDelta: number }>;

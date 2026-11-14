@@ -23,6 +23,7 @@ export interface RestaurantItem {
   priceRange: '$' | '$$' | '$$$' | '$$$$';
   image: string;
   bannerImage: string;
+  isOpen?: boolean;
   address?: {
     street: string;
     city: string;

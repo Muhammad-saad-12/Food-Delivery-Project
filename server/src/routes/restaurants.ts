@@ -243,3 +243,46 @@ restaurantRouter.post(
     }
   }
 );
+
+// PUT /api/restaurants/:id - Update restaurant profile, operating schedules, location
+restaurantRouter.put('/:id', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const isConnected = mongoose.connection.readyState === 1;
+
+    if (!isConnected || !mongoose.isValidObjectId(id)) {
+      const fallbackList = getFallbackRestaurants();
+      const existing = fallbackList.find((r) => r._id === id || r.slug === id);
+      const updated = {
+        ...(existing || fallbackList[0]),
+        ...req.body,
+        updatedAt: new Date().toISOString(),
+      };
+      res.status(200).json({
+        message: 'Restaurant profile updated successfully',
+        restaurant: updated,
+        source: 'local-fallback',
+      });
+      return;
+    }
+
+    const updated = await Restaurant.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updated) {
+      res.status(404).json({ error: 'Restaurant not found' });
+      return;
+    }
+
+    res.status(200).json({
+      message: 'Restaurant profile updated successfully',
+      restaurant: updated,
+      source: 'database',
+    });
+  } catch (error) {
+    console.error('Error updating restaurant:', error);
+    res.status(500).json({ error: 'Failed to update restaurant profile' });
+  }
+});

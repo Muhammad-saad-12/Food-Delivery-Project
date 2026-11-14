@@ -15,7 +15,13 @@ import { CheckoutModal } from './CheckoutModal';
 import { InvoiceView } from './InvoiceView';
 import { OrderHistoryView } from './OrderHistoryView';
 
-export const CustomerPortal: React.FC = () => {
+interface CustomerPortalProps {
+  onSwitchToVendor?: () => void;
+}
+
+export const CustomerPortal: React.FC<CustomerPortalProps> = ({
+  onSwitchToVendor,
+}) => {
   const dispatch = useDispatch();
   const cart = useSelector((state: RootState) => state.cart);
 
@@ -64,6 +70,7 @@ export const CustomerPortal: React.FC = () => {
           setSelectedRestaurant(null);
         }}
         onGoOrders={() => setActiveView('orders')}
+        onSwitchToVendor={onSwitchToVendor}
         activeView={activeView}
         activeRestaurantName={selectedRestaurant?.name}
       />
