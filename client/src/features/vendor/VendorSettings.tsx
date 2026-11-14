@@ -64,11 +64,11 @@ export const VendorSettings: React.FC<VendorSettingsProps> = ({
   const [street, setStreet] = useState(restaurant.address?.street || '42 Gourmet Avenue, Sector F-7');
   const [city, setCity] = useState(restaurant.address?.city || 'Islamabad');
   const [areaOrLandmark, setAreaOrLandmark] = useState('F-7 Markaz (Jinnah Super)');
-  const [deliveryFee, setDeliveryFee] = useState<number>(restaurant.deliveryFee || 1.99);
+  const [deliveryFee, setDeliveryFee] = useState<number>(restaurant.deliveryFee || 180);
   const [deliveryTimeMin, setDeliveryTimeMin] = useState<number>(
     restaurant.deliveryTimeMin || 25
   );
-  const [minOrder, setMinOrder] = useState<number>(restaurant.minOrder || 15.0);
+  const [minOrder, setMinOrder] = useState<number>(restaurant.minOrder || 600);
 
   // Operating Hours State
   const [operatingHours, setOperatingHours] = useState(DEFAULT_HOURS);
@@ -469,10 +469,10 @@ export const VendorSettings: React.FC<VendorSettingsProps> = ({
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-300">Delivery Fee ($ / Rs)</label>
+              <label className="text-xs font-semibold text-slate-300">Delivery Fee (PKR / Rs.)</label>
               <input
                 type="number"
-                step="0.1"
+                step="10"
                 min="0"
                 value={deliveryFee}
                 onChange={(e) => setDeliveryFee(parseFloat(e.target.value) || 0)}
@@ -492,10 +492,10 @@ export const VendorSettings: React.FC<VendorSettingsProps> = ({
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-300">Minimum Order Amount ($ / Rs)</label>
+              <label className="text-xs font-semibold text-slate-300">Minimum Order Amount (PKR / Rs.)</label>
               <input
                 type="number"
-                step="0.5"
+                step="50"
                 min="0"
                 value={minOrder}
                 onChange={(e) => setMinOrder(parseFloat(e.target.value) || 0)}

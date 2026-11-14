@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import api from '../../services/api';
 import { getSocket } from '../../services/socket';
+import { formatPKR } from '../../utils/currency';
 
 interface LiveOrdersProps {
   restaurantId: string;
@@ -154,7 +155,7 @@ export const LiveOrders: React.FC<LiveOrdersProps> = ({
                 New Order Received! #{newOrderAlert.orderNumber}
               </h4>
               <p className="text-xs text-slate-300">
-                {newOrderAlert.customerName} ordered {newOrderAlert.items?.length || 1} dishes (${newOrderAlert.pricing?.total?.toFixed(2)})
+                {newOrderAlert.customerName} ordered {newOrderAlert.items?.length || 1} dishes ({formatPKR(newOrderAlert.pricing?.total)})
               </p>
             </div>
           </div>
@@ -233,7 +234,7 @@ export const LiveOrders: React.FC<LiveOrdersProps> = ({
             <DollarSign className="w-4 h-4 text-emerald-400" />
           </div>
           <p className="text-xl font-black text-white font-mono">
-            ${totalRevenue.toFixed(2)}
+            {formatPKR(totalRevenue)}
           </p>
           <span className="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
             <TrendingUp className="w-3 h-3" /> Live Gross Volume
@@ -358,7 +359,7 @@ export const LiveOrders: React.FC<LiveOrdersProps> = ({
 
                   <div className="text-right">
                     <span className="text-base font-extrabold text-emerald-400 font-mono block">
-                      ${order.pricing?.total?.toFixed(2)}
+                      {formatPKR(order.pricing?.total)}
                     </span>
                     <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-800 text-slate-300">
                       {order.payment?.method?.toUpperCase()} [
@@ -383,7 +384,7 @@ export const LiveOrders: React.FC<LiveOrdersProps> = ({
                             {item.quantity}x {item.name}
                           </span>
                           <span className="font-mono text-slate-400">
-                            ${item.itemTotal?.toFixed(2)}
+                            {formatPKR(item.itemTotal)}
                           </span>
                         </div>
 

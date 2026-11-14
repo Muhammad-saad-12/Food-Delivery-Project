@@ -34,7 +34,7 @@ export interface CartState {
   restaurantName: string | null;
   items: CartItem[];
   subtotal: number;
-  taxRate: number; // e.g. 0.085 for 8.5%
+  taxRate: number; // e.g. 0.08 for 8% PRA/GST
   tax: number;
   deliveryFee: number;
   tip: number;
@@ -42,8 +42,9 @@ export interface CartState {
   isOpen: boolean; // Controls cart drawer visibility
 }
 
-const TAX_RATE = 0.085; // 8.5% standard tax
-const DEFAULT_DELIVERY_FEE = 2.99;
+export const TAX_RATE = 0.08; // 8% standard Pakistani provincial sales tax (PRA/SRB)
+export const DEFAULT_DELIVERY_FEE = 180; // Standard Rs. 180 rider delivery
+export const FREE_DELIVERY_THRESHOLD = 2000; // Free delivery for orders Rs. 2,000+
 
 const initialState: CartState = {
   restaurantId: null,
@@ -53,7 +54,7 @@ const initialState: CartState = {
   taxRate: TAX_RATE,
   tax: 0,
   deliveryFee: DEFAULT_DELIVERY_FEE,
-  tip: 3.0,
+  tip: 100,
   total: 0,
   isOpen: false,
 };
@@ -71,8 +72,8 @@ const calculateTotals = (state: CartState) => {
     return;
   }
 
-  // Free delivery for orders over $40
-  const deliveryFee = state.subtotal >= 40 ? 0 : (state.deliveryFee || DEFAULT_DELIVERY_FEE);
+  // Free delivery for orders over Rs. 2,000 threshold
+  const deliveryFee = state.subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : (state.deliveryFee || DEFAULT_DELIVERY_FEE);
   state.deliveryFee = Number(deliveryFee.toFixed(2));
 
   const tax = state.subtotal * state.taxRate;
@@ -196,7 +197,7 @@ export const cartSlice = createSlice({
       state.subtotal = 0;
       state.tax = 0;
       state.deliveryFee = DEFAULT_DELIVERY_FEE;
-      state.tip = 3.0;
+      state.tip = 100;
       state.total = 0;
     },
 

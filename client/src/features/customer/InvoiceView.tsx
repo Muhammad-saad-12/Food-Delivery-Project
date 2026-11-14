@@ -10,6 +10,7 @@ import {
   Phone,
   Calendar,
 } from 'lucide-react';
+import { formatPKR } from '../../utils/currency';
 
 interface InvoiceViewProps {
   order: any | null;
@@ -50,7 +51,7 @@ ITEMIZED ORDER BREAKDOWN:
 ${(order.items || [])
   .map(
     (item: any, i: number) =>
-      `${i + 1}. ${item.name} x${item.quantity} - $${item.itemTotal.toFixed(2)}
+      `${i + 1}. ${item.name} x${item.quantity} - ${formatPKR(item.itemTotal)}
    Portion: ${item.size?.name || 'Standard'} | Spice: ${item.spiceLevel || 'None'}
    ${item.selectedAddOns?.length ? `Add-ons: ${item.selectedAddOns.map((a: any) => a.name).join(', ')}` : ''}`
   )
@@ -58,12 +59,12 @@ ${(order.items || [])
 
 FINANCIAL SUMMARY:
 ---------------------------------------------------
-Subtotal:         $${order.pricing?.subtotal?.toFixed(2)}
-Sales Tax (8.5%): $${order.pricing?.tax?.toFixed(2)}
-Delivery Charges: ${order.pricing?.deliveryFee === 0 ? 'FREE' : `$${order.pricing?.deliveryFee?.toFixed(2)}`}
-Driver Tip:       $${order.pricing?.tip?.toFixed(2)}
+Subtotal:                 ${formatPKR(order.pricing?.subtotal)}
+Sales Tax (8% PRA/GST):   ${formatPKR(order.pricing?.tax)}
+Delivery Charges:         ${order.pricing?.deliveryFee === 0 ? 'FREE' : formatPKR(order.pricing?.deliveryFee)}
+Rider Tip:                ${formatPKR(order.pricing?.tip)}
 ---------------------------------------------------
-TOTAL AMOUNT:     $${order.pricing?.total?.toFixed(2)}
+TOTAL AMOUNT:             ${formatPKR(order.pricing?.total)}
 PAYMENT METHOD:   ${order.payment?.method?.toUpperCase()} [Status: ${order.payment?.status?.toUpperCase()}]
 ${order.payment?.transactionRef ? `Transaction Ref: ${order.payment?.transactionRef}` : ''}
 ===================================================
@@ -241,10 +242,10 @@ Thank you for dining with ${order.restaurantName}!
                             {item.quantity}
                           </td>
                           <td className="py-3 px-3 text-right font-mono text-slate-300">
-                            ${item.unitPrice?.toFixed(2)}
+                            {formatPKR(item.unitPrice)}
                           </td>
                           <td className="py-3 px-3 text-right font-mono font-bold text-white">
-                            ${item.itemTotal?.toFixed(2)}
+                            {formatPKR(item.itemTotal)}
                           </td>
                         </tr>
                       ))}
@@ -290,14 +291,14 @@ Thank you for dining with ${order.restaurantName}!
                 <div className="space-y-1.5 text-xs text-slate-300 bg-slate-900/60 p-4 rounded-xl border border-slate-800">
                   <div className="flex justify-between">
                     <span className="text-slate-400">Subtotal:</span>
-                    <span className="font-mono text-white">
-                      ${order.pricing?.subtotal?.toFixed(2)}
+                    <span className="font-mono text-white font-semibold">
+                      {formatPKR(order.pricing?.subtotal)}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-400">Sales Tax (8.5%):</span>
+                    <span className="text-slate-400">Sales Tax (8% PRA/GST):</span>
                     <span className="font-mono text-white">
-                      ${order.pricing?.tax?.toFixed(2)}
+                      {formatPKR(order.pricing?.tax)}
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -306,20 +307,20 @@ Thank you for dining with ${order.restaurantName}!
                       {order.pricing?.deliveryFee === 0 ? (
                         <span className="text-emerald-400 font-bold">FREE</span>
                       ) : (
-                        `$${order.pricing?.deliveryFee?.toFixed(2)}`
+                        formatPKR(order.pricing?.deliveryFee)
                       )}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-400">Driver Tip:</span>
+                    <span className="text-slate-400">Rider Tip:</span>
                     <span className="font-mono text-white">
-                      ${order.pricing?.tip?.toFixed(2)}
+                      {formatPKR(order.pricing?.tip)}
                     </span>
                   </div>
                   <div className="flex justify-between text-base font-extrabold text-white pt-2 border-t border-slate-800">
                     <span>Net Amount:</span>
-                    <span className="text-emerald-400 font-mono">
-                      ${order.pricing?.total?.toFixed(2)}
+                    <span className="text-emerald-400 font-mono text-lg font-black">
+                      {formatPKR(order.pricing?.total)}
                     </span>
                   </div>
                 </div>

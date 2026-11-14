@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X, Flame, Plus, Minus, Check, Sparkles } from 'lucide-react';
+import { formatPKR } from '../../utils/currency';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../store/slices/cartSlice';
 
@@ -183,7 +184,7 @@ export const FoodCustomizationModal: React.FC<FoodCustomizationModalProps> = ({
                       >
                         <span>{size.name}</span>
                         <span className="text-xs text-slate-400">
-                          {size.priceDelta > 0 ? `+$${size.priceDelta.toFixed(2)}` : 'Standard'}
+                          {size.priceDelta > 0 ? `+${formatPKR(size.priceDelta)}` : 'Standard'}
                         </span>
                       </button>
                     );
@@ -261,7 +262,7 @@ export const FoodCustomizationModal: React.FC<FoodCustomizationModalProps> = ({
                           <span className="text-sm">{addOn.name}</span>
                         </div>
                         <span className="text-xs font-semibold text-emerald-400">
-                          +${addOn.price.toFixed(2)}
+                          +{formatPKR(addOn.price)}
                         </span>
                       </div>
                     );
@@ -316,7 +317,7 @@ export const FoodCustomizationModal: React.FC<FoodCustomizationModalProps> = ({
               className="flex-1 bg-emerald-500 hover:bg-emerald-600 active:scale-[0.99] text-slate-950 font-bold py-3 px-5 rounded-xl transition shadow-lg shadow-emerald-500/20 flex items-center justify-between"
             >
               <span>Add to Order</span>
-              <span>${totalPrice.toFixed(2)}</span>
+              <span className="font-mono">{formatPKR(totalPrice)}</span>
             </button>
           </div>
         </Dialog.Content>

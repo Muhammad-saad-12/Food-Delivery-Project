@@ -16,6 +16,7 @@ import api from '../../services/api';
 import { RestaurantItem } from './CustomerDiscovery';
 import { MenuItemOption } from '../../components/customer/FoodCustomizationModal';
 import { ReviewModal } from '../../components/customer/ReviewModal';
+import { formatPKR } from '../../utils/currency';
 
 interface RestaurantDetailProps {
   restaurant: RestaurantItem;
@@ -177,7 +178,7 @@ export const RestaurantDetail: React.FC<RestaurantDetailProps> = ({
               <div className="text-center px-2">
                 <div className="flex items-center gap-1 text-sm font-bold text-white">
                   <Bike className="w-4 h-4 text-emerald-400" />
-                  <span>${restaurant.deliveryFee.toFixed(2)}</span>
+                  <span>{formatPKR(restaurant.deliveryFee)}</span>
                 </div>
                 <span className="text-[10px] text-slate-400">Delivery Fee</span>
               </div>
@@ -342,7 +343,7 @@ export const RestaurantDetail: React.FC<RestaurantDetailProps> = ({
                         {/* Price and Action Buttons */}
                         <div className="flex items-center justify-between pt-2">
                           <span className="text-base font-extrabold text-white font-mono">
-                            ${item.price.toFixed(2)}
+                            {formatPKR(item.price)}
                           </span>
 
                           <div className="flex items-center gap-2">

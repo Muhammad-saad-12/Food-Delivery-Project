@@ -88,8 +88,8 @@ adminRouter.get('/stats', async (_req: Request, res: Response): Promise<void> =>
     const isConnected = mongoose.connection.readyState === 1;
 
     if (!isConnected) {
-      // Mock metrics calculation
-      const totalSales = 18450.75;
+      // Mock metrics calculation in PKR
+      const totalSales = 754500;
       const totalOrders = 342;
       const completedDeliveries = 318;
       const activeRestaurants = initialRestaurants.length;
@@ -100,15 +100,15 @@ adminRouter.get('/stats', async (_req: Request, res: Response): Promise<void> =>
       const resolvedSupportTickets = 45;
       const averageOrderValue = Number((totalSales / totalOrders).toFixed(2));
 
-      // Last 7 days trend
+      // Last 7 days trend in PKR
       const salesByDay = [
-        { day: 'Mon', sales: 2150, orders: 42 },
-        { day: 'Tue', sales: 2480, orders: 48 },
-        { day: 'Wed', sales: 2310, orders: 44 },
-        { day: 'Thu', sales: 2890, orders: 53 },
-        { day: 'Fri', sales: 3450, orders: 67 },
-        { day: 'Sat', sales: 3820, orders: 74 },
-        { day: 'Sun', sales: 3350, orders: 64 },
+        { day: 'Mon', sales: 78500, orders: 42 },
+        { day: 'Tue', sales: 92400, orders: 48 },
+        { day: 'Wed', sales: 84600, orders: 44 },
+        { day: 'Thu', sales: 104200, orders: 53 },
+        { day: 'Fri', sales: 128500, orders: 67 },
+        { day: 'Sat', sales: 145000, orders: 74 },
+        { day: 'Sun', sales: 121300, orders: 64 },
       ];
 
       const ordersByStatus = {
@@ -124,7 +124,7 @@ adminRouter.get('/stats', async (_req: Request, res: Response): Promise<void> =>
         id: `mock-rest-${i + 1}`,
         name: r.name,
         orders: 68 - i * 9,
-        revenue: Math.round((68 - i * 9) * (45 - i * 3)),
+        revenue: Math.round((68 - i * 9) * (2150 - i * 150)),
         rating: r.rating,
         status: fallbackRestaurantStatuses[`mock-rest-${i + 1}`]?.status || 'active',
       }));
@@ -171,15 +171,15 @@ adminRouter.get('/stats', async (_req: Request, res: Response): Promise<void> =>
 
     const averageOrderValue = totalOrders > 0 ? Number((totalSales / totalOrders).toFixed(2)) : 0;
 
-    // Last 7 days sales
+    // Last 7 days sales in PKR
     const salesByDay = [
-      { day: 'Mon', sales: 2150, orders: 42 },
-      { day: 'Tue', sales: 2480, orders: 48 },
-      { day: 'Wed', sales: 2310, orders: 44 },
-      { day: 'Thu', sales: 2890, orders: 53 },
-      { day: 'Fri', sales: 3450, orders: 67 },
-      { day: 'Sat', sales: 3820, orders: 74 },
-      { day: 'Sun', sales: 3350, orders: 64 },
+      { day: 'Mon', sales: 78500, orders: 42 },
+      { day: 'Tue', sales: 92400, orders: 48 },
+      { day: 'Wed', sales: 84600, orders: 44 },
+      { day: 'Thu', sales: 104200, orders: 53 },
+      { day: 'Fri', sales: 128500, orders: 67 },
+      { day: 'Sat', sales: 145000, orders: 74 },
+      { day: 'Sun', sales: 121300, orders: 64 },
     ];
 
     const dbRestaurants = await Restaurant.find().limit(5);
@@ -187,7 +187,7 @@ adminRouter.get('/stats', async (_req: Request, res: Response): Promise<void> =>
       id: r._id,
       name: r.name,
       orders: 45 - i * 5,
-      revenue: Math.round((45 - i * 5) * 38),
+      revenue: Math.round((45 - i * 5) * 1950),
       rating: r.rating,
       status: r.status || 'active',
     }));

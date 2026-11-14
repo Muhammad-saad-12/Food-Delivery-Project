@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import api from '../../services/api';
 import { MenuItemOption } from '../customer/FoodCustomizationModal';
+import { formatPKR } from '../../utils/currency';
 
 export interface ChatMessage {
   id: string;
@@ -107,7 +108,7 @@ export const AIChatWidget: React.FC<AIChatWidgetProps> = ({
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-40">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40">
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -115,7 +116,7 @@ export const AIChatWidget: React.FC<AIChatWidgetProps> = ({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="w-[90vw] sm:w-[400px] h-[540px] bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden mb-3"
+            className="w-[calc(100vw-2rem)] sm:w-[400px] max-h-[82vh] h-[520px] sm:h-[540px] bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl flex flex-col overflow-hidden mb-3"
           >
             {/* Header */}
             <div className="p-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
@@ -202,7 +203,7 @@ export const AIChatWidget: React.FC<AIChatWidgetProps> = ({
                                   {item.name}
                                 </h5>
                                 <span className="text-[11px] text-emerald-400 font-bold font-mono">
-                                  ${item.price.toFixed(2)}
+                                  {formatPKR(item.price)}
                                 </span>
                               </div>
                             </div>

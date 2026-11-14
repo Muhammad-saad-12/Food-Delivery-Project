@@ -18,6 +18,7 @@ import {
   ArrowRight,
   ShieldCheck,
 } from 'lucide-react';
+import { formatPKR } from '../../utils/currency';
 
 interface CartDrawerProps {
   onProceedToCheckout?: () => void;
@@ -113,18 +114,18 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-xs flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-emerald-400" />
-                    {cart.subtotal >= 40 ? (
+                    {cart.subtotal >= 2000 ? (
                       <span className="text-emerald-400 font-medium">
-                        Unlocked Free Delivery!
+                        🎉 Unlocked Free Delivery!
                       </span>
                     ) : (
                       <span className="text-slate-300">
-                        Add ${(40 - cart.subtotal).toFixed(2)} more for{' '}
+                        Add {formatPKR(2000 - cart.subtotal)} more for{' '}
                         <strong className="text-emerald-400">Free Delivery</strong>
                       </span>
                     )}
                   </div>
-                  <span className="text-slate-500 font-mono">Goal $40</span>
+                  <span className="text-slate-500 font-mono text-[11px]">Goal Rs. 2,000</span>
                 </div>
 
                 {/* Items List */}
@@ -143,8 +144,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         <h4 className="text-sm font-semibold text-white truncate">
                           {item.name}
                         </h4>
-                        <span className="text-sm font-bold text-white shrink-0">
-                          ${item.itemTotal.toFixed(2)}
+                        <span className="text-sm font-bold text-emerald-400 shrink-0 font-mono">
+                          {formatPKR(item.itemTotal)}
                         </span>
                       </div>
 
@@ -233,10 +234,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               {/* Tip Selection */}
               <div>
                 <label className="text-xs font-medium text-slate-400 block mb-2">
-                  Driver Appreciation Tip
+                  Rider Appreciation Tip (PKR)
                 </label>
                 <div className="grid grid-cols-4 gap-2">
-                  {[2.0, 3.0, 5.0, 7.0].map((amount) => {
+                  {[50, 100, 200, 300].map((amount) => {
                     const isSelected = cart.tip === amount;
                     return (
                       <button
@@ -245,11 +246,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         onClick={() => dispatch(setTip(amount))}
                         className={`py-1.5 rounded-lg text-xs font-semibold border transition ${
                           isSelected
-                            ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400'
+                            ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400 font-bold'
                             : 'border-slate-800 bg-slate-900 text-slate-400 hover:border-slate-700'
                         }`}
                       >
-                        ${amount.toFixed(2)}
+                        Rs. {amount}
                       </button>
                     );
                   })}
@@ -260,11 +261,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               <div className="space-y-1.5 text-xs text-slate-400 pt-2 border-t border-slate-800/80">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="text-slate-200 font-mono">${cart.subtotal.toFixed(2)}</span>
+                  <span className="text-slate-200 font-mono font-semibold">{formatPKR(cart.subtotal)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Estimated Tax (8.5%)</span>
-                  <span className="text-slate-200 font-mono">${cart.tax.toFixed(2)}</span>
+                  <span>Estimated Sales Tax (8% PRA/GST)</span>
+                  <span className="text-slate-200 font-mono">{formatPKR(cart.tax)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Delivery Fee</span>
@@ -272,17 +273,17 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     {cart.deliveryFee === 0 ? (
                       <span className="text-emerald-400 font-semibold">FREE</span>
                     ) : (
-                      `$${cart.deliveryFee.toFixed(2)}`
+                      formatPKR(cart.deliveryFee)
                     )}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Tip</span>
-                  <span className="text-slate-200 font-mono">${cart.tip.toFixed(2)}</span>
+                  <span>Rider Tip</span>
+                  <span className="text-slate-200 font-mono">{formatPKR(cart.tip)}</span>
                 </div>
                 <div className="flex justify-between text-sm font-bold text-white pt-2 border-t border-slate-800">
                   <span>Grand Total</span>
-                  <span className="text-emerald-400 font-mono">${cart.total.toFixed(2)}</span>
+                  <span className="text-emerald-400 font-mono font-black text-base">{formatPKR(cart.total)}</span>
                 </div>
               </div>
 
@@ -290,14 +291,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               <button
                 type="button"
                 onClick={handleCheckoutClick}
-                className="w-full bg-emerald-500 hover:bg-emerald-600 active:scale-[0.99] text-slate-950 font-bold py-3 px-4 rounded-xl transition shadow-lg shadow-emerald-500/20 flex items-center justify-between text-sm"
+                className="w-full bg-emerald-500 hover:bg-emerald-600 active:scale-[0.99] text-slate-950 font-bold py-3.5 px-4 rounded-xl transition shadow-lg shadow-emerald-500/20 flex items-center justify-between text-sm"
               >
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-slate-950" />
                   <span>Proceed to Delivery & Payment</span>
                 </div>
                 <div className="flex items-center gap-1 font-mono">
-                  <span>${cart.total.toFixed(2)}</span>
+                  <span>{formatPKR(cart.total)}</span>
                   <ArrowRight className="w-4 h-4" />
                 </div>
               </button>

@@ -8,6 +8,7 @@ import {
   SlidersHorizontal,
 } from 'lucide-react';
 import api from '../../services/api';
+import { formatPKR } from '../../utils/currency';
 
 export interface RestaurantItem {
   _id: string;
@@ -39,7 +40,7 @@ interface CustomerDiscoveryProps {
   onSelectRestaurant: (restaurant: RestaurantItem) => void;
 }
 
-const CUISINES = ['All', 'Italian', 'Japanese', 'Mexican', 'Vegan', 'Healthy'];
+const CUISINES = ['All', 'Pakistani', 'Karahi', 'Biryani', 'BBQ', 'Seafood', 'Mughlai'];
 const DIETARY_OPTIONS = [
   'All',
   'Vegetarian Friendly',
@@ -318,11 +319,11 @@ export const CustomerDiscovery: React.FC<CustomerDiscoveryProps> = ({
                     <div className="flex items-center gap-1 text-slate-300">
                       <Bike className="w-3.5 h-3.5 text-emerald-400" />
                       <span>
-                        {restaurant.deliveryFee === 0 ? 'Free Delivery' : `$${restaurant.deliveryFee.toFixed(2)} Fee`}
+                        {restaurant.deliveryFee === 0 ? 'Free Delivery' : `${formatPKR(restaurant.deliveryFee)} Delivery`}
                       </span>
                     </div>
-                    <span className="text-[11px] text-slate-400">
-                      Min: ${restaurant.minOrder.toFixed(2)}
+                    <span className="text-[11px] text-slate-400 font-mono">
+                      Min: {formatPKR(restaurant.minOrder)}
                     </span>
                   </div>
                 </div>

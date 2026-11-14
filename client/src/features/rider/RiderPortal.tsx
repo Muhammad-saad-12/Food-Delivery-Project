@@ -19,6 +19,7 @@ import L from 'leaflet';
 import api from '../../services/api';
 import { getSocket } from '../../services/socket';
 import { fetchRoadRoute, RouteResult } from '../../services/routing';
+import { formatPKR } from '../../utils/currency';
 
 interface RiderPortalProps {
   onSwitchToCustomer: () => void;
@@ -40,7 +41,7 @@ export const RiderPortal: React.FC<RiderPortalProps> = ({
     vehicle: 'Honda CD70 (ICT-8492)',
     rating: 4.9,
     tripsToday: 6,
-    earningsToday: 38.5,
+    earningsToday: 2850,
   });
 
   const [availableOrders, setAvailableOrders] = useState<any[]>([]);
@@ -374,7 +375,7 @@ export const RiderPortal: React.FC<RiderPortalProps> = ({
           <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
             <span className="text-xs text-slate-400 block">Today's Earnings</span>
             <p className="text-xl font-black text-emerald-400 font-mono">
-              ${riderProfile.earningsToday.toFixed(2)}
+              {formatPKR(riderProfile.earningsToday)}
             </p>
             <span className="text-[10px] text-slate-500">6 Trips Finished</span>
           </div>
@@ -522,7 +523,7 @@ export const RiderPortal: React.FC<RiderPortalProps> = ({
                 Payment Type:{' '}
                 <strong className="text-white font-mono uppercase">
                   {activeDelivery.payment?.method} (
-                  {activeDelivery.payment?.status === 'paid' ? 'Paid Digitally' : 'Collect Cash $ ' + activeDelivery.pricing?.total?.toFixed(2)}
+                  {activeDelivery.payment?.status === 'paid' ? 'Paid Digitally' : 'Collect Cash ' + formatPKR(activeDelivery.pricing?.total)}
                   )
                 </strong>
               </div>
@@ -580,7 +581,7 @@ export const RiderPortal: React.FC<RiderPortalProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {availableOrders.map((order) => {
                 const isAccepting = acceptingId === (order._id || order.orderNumber);
-                const payoutEarned = (order.pricing?.deliveryFee || 2.99) + (order.pricing?.tip || 0);
+                const payoutEarned = (order.pricing?.deliveryFee || 180) + (order.pricing?.tip || 0);
 
                 return (
                   <div
@@ -605,7 +606,7 @@ export const RiderPortal: React.FC<RiderPortalProps> = ({
 
                       <div className="text-right">
                         <span className="text-base font-black text-emerald-400 font-mono block">
-                          +${payoutEarned.toFixed(2)}
+                          +{formatPKR(payoutEarned)}
                         </span>
                         <span className="text-[10px] text-slate-400">Rider Earning</span>
                       </div>

@@ -38,7 +38,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   // Executive Stats State
   const [stats, setStats] = useState<any>({
-    totalSales: 18450.75,
+    totalSales: 754500,
     totalOrders: 342,
     completedDeliveries: 318,
     activeRestaurants: 5,
@@ -47,15 +47,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     activeRiders: 9,
     openSupportTickets: 3,
     resolvedSupportTickets: 45,
-    averageOrderValue: 53.95,
+    averageOrderValue: 2206,
     salesByDay: [
-      { day: 'Mon', sales: 2150, orders: 42 },
-      { day: 'Tue', sales: 2480, orders: 48 },
-      { day: 'Wed', sales: 2310, orders: 44 },
-      { day: 'Thu', sales: 2890, orders: 53 },
-      { day: 'Fri', sales: 3450, orders: 67 },
-      { day: 'Sat', sales: 3820, orders: 74 },
-      { day: 'Sun', sales: 3350, orders: 64 },
+      { day: 'Mon', sales: 78500, orders: 42 },
+      { day: 'Tue', sales: 92400, orders: 48 },
+      { day: 'Wed', sales: 86200, orders: 44 },
+      { day: 'Thu', sales: 104500, orders: 53 },
+      { day: 'Fri', sales: 135800, orders: 67 },
+      { day: 'Sat', sales: 148900, orders: 74 },
+      { day: 'Sun', sales: 108200, orders: 64 },
     ],
     ordersByStatus: {
       pending: 4,
@@ -526,19 +526,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         <p className="text-xs text-slate-400">Daily gross volume across all partner restaurants</p>
                       </div>
                       <span className="text-xs font-mono font-bold text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded-lg border border-indigo-500/20">
-                        Avg Ticket: PKR {stats.averageOrderValue}
+                        Avg Ticket: PKR {stats.averageOrderValue?.toLocaleString()}
                       </span>
                     </div>
 
                     {/* CSS Bar Chart */}
                     <div className="h-52 flex items-end justify-between gap-3 pt-6 pb-2 px-2 border-b border-slate-800">
                       {stats.salesByDay.map((d: any, idx: number) => {
-                        const maxSales = 4000;
-                        const heightPct = Math.round((d.sales / maxSales) * 100);
+                        const maxSales = Math.max(...stats.salesByDay.map((item: any) => item.sales || 1), 160000);
+                        const heightPct = Math.min(100, Math.round((d.sales / maxSales) * 100));
                         return (
                           <div key={idx} className="flex-1 flex flex-col items-center gap-2 group">
-                            <div className="text-[10px] font-mono text-slate-400 opacity-0 group-hover:opacity-100 transition">
-                              Rs.{d.sales}
+                            <div className="text-[10px] font-mono text-slate-400 opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
+                              Rs. {d.sales.toLocaleString()}
                             </div>
                             <div
                               style={{ height: `${heightPct}%` }}

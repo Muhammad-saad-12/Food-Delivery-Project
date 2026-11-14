@@ -122,11 +122,11 @@ Help the customer find the best dishes, understand dietary compatibility (vegan,
       const restSummaries = restaurants
         .map(
           (r) =>
-            `• **${r.name}**: ${r.deliveryTimeMin} min average delivery, $${r.deliveryFee.toFixed(2)} delivery fee (Min order: $${r.minOrder.toFixed(2)})`
+            `• **${r.name}**: ${r.deliveryTimeMin} min average delivery, Rs. ${r.deliveryFee} delivery fee (Min order: Rs. ${r.minOrder})`
         )
         .join('\n');
-      replyText = `Here is our current delivery breakdown:\n\n${restSummaries}\n\nMost orders arrive hot and fresh within 20 to 35 minutes! Would you like to check out their menus?`;
-      quickReplies = ['Show me Trattoria Bella Roma', 'Show me Sakura Umami Kitchen', 'Browse under $15'];
+      replyText = `Here is our current delivery breakdown across metro locations:\n\n${restSummaries}\n\nOrders over Rs. 2,000 enjoy **Free Delivery**! All orders arrive fresh within 25 to 40 minutes. Would you like to check out their menus?`;
+      quickReplies = ['Show me Butt Karahi', 'Show Student Biryani', 'Browse budget meals under Rs. 600'];
     } else if (isVeganQuery) {
       matchingItems = items.filter(
         (i: any) =>
@@ -134,78 +134,78 @@ Help the customer find the best dishes, understand dietary compatibility (vegan,
           /vegan/i.test(i.name) ||
           /vegan/i.test(i.description)
       );
-      replyText = `🌱 **Great plant-based choices for you!**\n\nWe feature dedicated vegan dining, especially at **Verde Pure Organic Bistro**.\n\nTop picks:\n${matchingItems
-        .map((i) => `• **${i.name}** ($${i.price.toFixed(2)}) - ${i.description}`)
+      replyText = `🌱 **Great plant-based choices for you!**\n\nWe feature fresh vegetable and lentil specialties across our partner menus:\n\n${matchingItems
+        .map((i) => `• **${i.name}** (Rs. ${i.price.toLocaleString()}) - ${i.description}`)
         .slice(0, 3)
-        .join('\n')}\n\nYou can also customize add-ons such as crispy organic tofu or avocado slices!`;
-      quickReplies = ['Are these gluten-free too?', 'What dressings are available?', 'Order Golden Turmeric Bowl'];
+        .join('\n')}\n\nYou can also customize add-ons such as fresh salad, mint chutney, or roghni naan!`;
+      quickReplies = ['Are these gluten-free too?', 'What sides are available?', 'Show salads & drinks'];
     } else if (isGlutenFreeQuery) {
       matchingItems = items.filter(
         (i: any) =>
           i.dietaryTags?.some((t: string) => /gluten.?free/i.test(t)) ||
           /gluten.?free/i.test(i.description)
       );
-      replyText = `🌾 **Gluten-Free Selections:**\n\nHere are safety-conscious gluten-free favorites:\n\n${matchingItems
-        .map((i) => `• **${i.name}** ($${i.price.toFixed(2)}) [${i.category}] - ${i.description}`)
+      replyText = `🌾 **Gluten-Free Selections:**\n\nHere are authentic gluten-free favorites:\n\n${matchingItems
+        .map((i) => `• **${i.name}** (Rs. ${i.price.toLocaleString()}) [${i.category}] - ${i.description}`)
         .slice(0, 3)
-        .join('\n')}\n\nPlease note your preference in the dish special instructions so the kitchen prepares it on dedicated cookware!`;
-      quickReplies = ['Show Birria QuesaTacos', 'Show Spicy Edamame', 'What vegan gluten-free options exist?'];
+        .join('\n')}\n\nPlease note your preference in the dish special instructions so the kitchen prepares it carefully!`;
+      quickReplies = ['Show Shinwari Karahi', 'Show Sajji BBQ', 'Show gluten-free biryani'];
     } else if (isHalalQuery) {
       matchingItems = items.filter(
         (i: any) =>
           i.dietaryTags?.some((t: string) => /halal/i.test(t)) ||
           /halal/i.test(i.description)
       );
-      replyText = `🌙 **Halal Friendly Recommendations:**\n\nWe feature certified halal meat options:\n\n${matchingItems
-        .map((i) => `• **${i.name}** ($${i.price.toFixed(2)}) - ${i.description}`)
+      replyText = `🌙 **100% Halal Certified Dining:**\n\nEvery restaurant on our platform is 100% Halal certified, using daily fresh halal cuts:\n\n${matchingItems
+        .map((i) => `• **${i.name}** (Rs. ${i.price.toLocaleString()}) - ${i.description}`)
         .slice(0, 3)
-        .join('\n')}\n\nOur kitchen staff observes strict separation and halal-certified sourcing.`;
-      quickReplies = ['Show El Fuego Tacos', 'Recommend seafood options', 'Check delivery times'];
+        .join('\n')}\n\nOur kitchen partners observe strict culinary hygiene and halal meat verification.`;
+      quickReplies = ['Show Butt Karahi', 'Show Kolachi BBQ', 'Check delivery times'];
     } else if (isSpicyQuery) {
       matchingItems = items.filter(
         (i: any) =>
           i.spiceLevels?.some((s: string) => /hot|fire|chili|spicy/i.test(s)) ||
           /spicy/i.test(i.name)
       );
-      replyText = `🌶️ **Fiery and Bold Favorites:**\n\nCraving that kick? Here are our best heat-packed dishes:\n\n${matchingItems
+      replyText = `🌶️ **Fiery and Desi Bold Favorites:**\n\nCraving that authentic spicy kick? Here are our top heat-packed dishes:\n\n${matchingItems
         .map(
           (i) =>
-            `• **${i.name}** ($${i.price.toFixed(2)}) - Offers spice levels up to: *${i.spiceLevels?.slice(-1)[0] || 'Extra Hot'}*`
+            `• **${i.name}** (Rs. ${i.price.toLocaleString()}) - Offers spice levels up to: *${i.spiceLevels?.slice(-1)[0] || 'Extra Spicy Ghost Pepper'}*`
         )
         .slice(0, 3)
-        .join('\n')}\n\nYou can select your exact spice level (from Mild to Extreme) when adding each dish to your cart!`;
-      quickReplies = ['Level 2 Tokyo Fire Ramen', 'Birria Tacos with Fuego Habanero', 'Mild alternatives'];
+        .join('\n')}\n\nYou can select your exact spice level (from Desi Medium to Fiery Mirch) when adding each dish to your cart!`;
+      quickReplies = ['Mutton Shinwari Karahi', 'Student Chicken Biryani', 'Mild alternatives'];
     } else if (isPastaPizzaQuery) {
-      matchingItems = items.filter((i: any) => /pizza|pasta|antipasti/i.test(i.category));
-      replyText = `🇮🇹 **Authentic Italian Flavors at Trattoria Bella Roma:**\n\n${matchingItems
-        .map((i) => `• **${i.name}** ($${i.price.toFixed(2)}) - ${i.description}`)
+      matchingItems = items.filter((i: any) => /pizza|pasta|continental/i.test(i.category));
+      replyText = `🍕 **Continental & Wood-Fired Specialities at Monal Islamabad:**\n\n${matchingItems
+        .map((i) => `• **${i.name}** (Rs. ${i.price.toLocaleString()}) - ${i.description}`)
         .slice(0, 3)
-        .join('\n')}\n\nAll our pizzas are baked in a 900°F stone oven with San Marzano tomatoes!`;
-      quickReplies = ['Customize Truffle Pizza', 'Add Wild Boar Pappardelle', 'See Desserts'];
+        .join('\n')}\n\nPrepared fresh to order with premium imported and local cheeses!`;
+      quickReplies = ['Customize Monal Pizza', 'See Desserts', 'Recommend Karahi'];
     } else if (isSushiRamenQuery) {
-      matchingItems = items.filter((i: any) => /ramen|sushi/i.test(i.category));
-      replyText = `🍣 **Umami Delights at Sakura Japanese Kitchen:**\n\n${matchingItems
-        .map((i) => `• **${i.name}** ($${i.price.toFixed(2)}) - ${i.description}`)
+      matchingItems = items.filter((i: any) => /bbq|karahi|biryani/i.test(i.category));
+      replyText = `🍖 **Authentic Pakistani BBQ & Biryani:**\n\n${matchingItems
+        .map((i) => `• **${i.name}** (Rs. ${i.price.toLocaleString()}) - ${i.description}`)
         .slice(0, 3)
-        .join('\n')}\n\nPair your bowl with flame-torched Aburi rolls and garlic togarashi edamame!`;
-      quickReplies = ['Order Tonkotsu Ramen', 'Salmon Aburi Roll details', 'How spicy is the broth?'];
+        .join('\n')}\n\nCharcoal-grilled live over natural coals!`;
+      quickReplies = ['Order Butt Karahi', 'Student Biryani details', 'How spicy is the mutton?'];
     } else if (isBudgetQuery) {
-      matchingItems = items.filter((i: any) => i.price <= 15).sort((a: any, b: any) => a.price - b.price);
-      replyText = `💰 **Value & Budget Friendly Dishes (Under $15):**\n\n${matchingItems
-        .map((i) => `• **${i.name}** — **$${i.price.toFixed(2)}** (${i.category})`)
+      matchingItems = items.filter((i: any) => i.price <= 600).sort((a: any, b: any) => a.price - b.price);
+      replyText = `💰 **Value & Budget Friendly Dishes (Under Rs. 600):**\n\n${matchingItems
+        .map((i) => `• **${i.name}** — **Rs. ${i.price.toLocaleString()}** (${i.category})`)
         .slice(0, 4)
-        .join('\n')}\n\nAdd any item directly to your cart and customize sizes to fit your meal plan!`;
-      quickReplies = ['Show me appetizers', 'Any combo deals?', 'Free delivery options'];
+        .join('\n')}\n\nAdd any item directly to your cart and customize portions to fit your meal!`;
+      quickReplies = ['Student Chicken Biryani', 'Roghni Naan & Chutney', 'Free delivery options'];
     } else {
       // General concierge recommendations
       matchingItems = items.filter((i: any) => i.popular).slice(0, 3);
-      replyText = `👋 Hello! I am your **GourmetOS Dining Assistant**.\n\nI can help you browse menus, find dishes tailored to dietary preferences (vegan, halal, gluten-free), adjust spice levels, or calculate meal estimates.\n\n🌟 **Today's Chef Recommendations:**\n${matchingItems
-        .map((i) => `• **${i.name}** ($${i.price.toFixed(2)}) - ${i.description}`)
-        .join('\n')}\n\nWhat kind of flavors are you in the mood for today?`;
+      replyText = `👋 Assalam-o-Alaikum! I am your **GourmetOS Dining Assistant**.\n\nI can help you browse authentic Pakistani restaurants (Kolachi, Butt Karahi, Monal, Haveli, Student Biryani), find dietary options, customize spice levels, or estimate your bill in PKR.\n\n🌟 **Today's Chef Recommendations:**\n${matchingItems
+        .map((i) => `• **${i.name}** (Rs. ${i.price.toLocaleString()}) - ${i.description}`)
+        .join('\n')}\n\nWhat kind of flavors are you craving today?`;
       quickReplies = [
         'Recommend something spicy 🌶️',
-        'Show vegan & gluten-free options 🌱',
-        'What are the popular pizzas & pastas?',
+        'Show Biryani & Karahi deals 🍗',
+        'Budget meals under Rs. 600 💰',
         'Fastest delivery times ⏱️',
       ];
     }
@@ -289,14 +289,14 @@ Generate an enticing, professional menu item object. Output ONLY a valid JSON ob
     let description = '';
     let dietaryTags: string[] = ['Halal', 'Chef Special'];
     let spiceLevels = ['None', 'Mild', 'Medium', 'Hot'];
-    let suggestedPrice = 16.5;
+    let suggestedPrice = 850;
     let sizes = [
       { id: 'size-reg', name: 'Regular Portion', priceDelta: 0 },
-      { id: 'size-large', name: 'Deluxe / Sharing Portion', priceDelta: 5.0 },
+      { id: 'size-large', name: 'Deluxe / Sharing Portion', priceDelta: 350 },
     ];
     let addOns = [
-      { id: 'addon-extra-sauce', name: 'House Dipping Sauce', price: 1.5 },
-      { id: 'addon-cheese', name: 'Melted Cheddar / Mozzarella', price: 2.0 },
+      { id: 'addon-extra-sauce', name: 'House Dipping Sauce / Chutney', price: 80 },
+      { id: 'addon-cheese', name: 'Melted Cheddar / Mozzarella', price: 150 },
     ];
 
     if (/burger|patty|smash/i.test(q)) {
@@ -304,114 +304,129 @@ Generate an enticing, professional menu item object. Output ONLY a valid JSON ob
       description = `Seared prime beef smash patty with crisp caramelized edges on a toasted buttery brioche bun, topped with aged cheddar, caramelized balsamic onions, and signature smoked secret sauce.`;
       dietaryTags = ['Halal', 'Popular'];
       spiceLevels = ['Original Mild', 'Chipotle Medium', 'Ghost Pepper Fiery'];
-      suggestedPrice = 12.5;
+      suggestedPrice = 750;
       sizes = [
         { id: 'size-single', name: 'Single 150g Patty', priceDelta: 0 },
-        { id: 'size-double', name: 'Double 300g Patty Deluxe', priceDelta: 4.5 },
+        { id: 'size-double', name: 'Double 300g Patty Deluxe', priceDelta: 280 },
       ];
       addOns = [
-        { id: 'addon-bacon', name: 'Crispy Beef Bacon Strips', price: 2.5 },
-        { id: 'addon-fries', name: 'Seasoned Truffle Parmesan Fries', price: 3.5 },
+        { id: 'addon-bacon', name: 'Crispy Beef Bacon Strips', price: 180 },
+        { id: 'addon-fries', name: 'Seasoned Truffle Parmesan Fries', price: 250 },
       ];
     } else if (/\b(karahi|handi|shinwari|nihari|haleem)\b/i.test(q) || /mutton/i.test(q)) {
       category = 'Traditional Karahi & Handi';
       description = `Tender bone-in meat slow-braised in a traditional iron wok with sweet vine tomatoes, slivered ginger, and cracked black peppercorns, finished with fragrant fresh coriander and desi butter.`;
       dietaryTags = ['Halal', 'High Protein', 'Gluten-Free'];
       spiceLevels = ['Mild Black Pepper', 'Authentic Shinwari Medium', 'Extra Desi Mirch'];
-      suggestedPrice = 22.0;
+      suggestedPrice = 2200;
       sizes = [
         { id: 'size-half', name: 'Half KG (1-2 Persons)', priceDelta: 0 },
-        { id: 'size-full', name: 'Full 1 KG (3-4 Persons)', priceDelta: 16.0 },
+        { id: 'size-full', name: 'Full 1 KG (3-4 Persons)', priceDelta: 1800 },
       ];
       addOns = [
-        { id: 'addon-roghni', name: 'Warm Roghni Naan (2 pcs)', price: 2.0 },
-        { id: 'addon-raita', name: 'Mint Zeera Raita & Kachumber Salad', price: 1.5 },
-        { id: 'addon-makhan', name: 'Desi Makhan (Butter) Dollop', price: 1.75 },
+        { id: 'addon-roghni', name: 'Warm Roghni Naan (2 pcs)', price: 120 },
+        { id: 'addon-raita', name: 'Mint Zeera Raita & Kachumber Salad', price: 120 },
+        { id: 'addon-makhan', name: 'Desi Makhan (Butter) Dollop', price: 180 },
+      ];
+    } else if (/biryani|pulao/i.test(q)) {
+      category = 'Biryani & Pulao Feasts';
+      description = `Fragrant long-grain aged basmati rice infused with whole aromatic spices, saffron broth, golden fried onions, and marinated meat tender to the bone.`;
+      dietaryTags = ['Halal', 'Chef Special', 'Gluten-Free'];
+      spiceLevels = ['Medium Desi Spice', 'Teekha Karachi Style', 'Fiery Mirch'];
+      suggestedPrice = 450;
+      sizes = [
+        { id: 'size-single', name: 'Single Plate (with Potato & Egg)', priceDelta: 0 },
+        { id: 'size-double', name: 'Double Meat Special', priceDelta: 180 },
+        { id: 'size-family', name: 'Family Handi (Serves 4)', priceDelta: 950 },
+      ];
+      addOns = [
+        { id: 'addon-shami', name: 'Shami Kebab (2 pcs)', price: 120 },
+        { id: 'addon-raita', name: 'Kachumber Raita & Mint Dip', price: 60 },
       ];
     } else if (/pizza/i.test(q)) {
       category = 'Wood-Fired Pizza';
       description = `48-hour fermented artisanal sourdough crust blistered at 900°F, topped with crushed San Marzano tomato coulis, fresh fior di latte mozzarella, and cold-pressed extra virgin olive oil.`;
       dietaryTags = ['Vegetarian Friendly', 'Artisanal'];
       spiceLevels = ['Classic Non-Spicy', 'Chili Flake Mild', 'Spicy Diablo'];
-      suggestedPrice = 17.0;
+      suggestedPrice = 1450;
       sizes = [
         { id: 'size-10', name: 'Personal 10"', priceDelta: 0 },
-        { id: 'size-14', name: 'Classic 14"', priceDelta: 5.5 },
-        { id: 'size-18', name: 'Family 18"', priceDelta: 10.0 },
+        { id: 'size-14', name: 'Classic 14"', priceDelta: 450 },
+        { id: 'size-18', name: 'Family 18"', priceDelta: 950 },
       ];
       addOns = [
-        { id: 'addon-crust', name: 'Garlic Butter Herb Crust', price: 2.5 },
-        { id: 'addon-burrata', name: 'Fresh Creamy Burrata Heart', price: 4.0 },
+        { id: 'addon-crust', name: 'Garlic Butter Herb Crust', price: 180 },
+        { id: 'addon-burrata', name: 'Fresh Creamy Burrata Heart', price: 350 },
       ];
     } else if (/pasta|fettuccine|penne|ravioli/i.test(q)) {
       category = 'Handcrafted Pasta';
       description = `Silky handmade durum wheat pasta tossed in a velvety emulsion of Parmigiano-Reggiano, sweet butter, roasted garlic, and freshly cracked Tellicherry black pepper.`;
       dietaryTags = ['Vegetarian Friendly', 'Italian Classic'];
       spiceLevels = ['Delicate Mild', 'Peppery Medium', 'Spicy Arrabbiata'];
-      suggestedPrice = 16.0;
+      suggestedPrice = 1250;
       sizes = [
         { id: 'size-reg', name: 'Regular Portion', priceDelta: 0 },
-        { id: 'size-large', name: 'Large Portion (+35%)', priceDelta: 4.5 },
+        { id: 'size-large', name: 'Large Portion (+35%)', priceDelta: 350 },
       ];
       addOns = [
-        { id: 'addon-truffle', name: 'Fresh Shaved Black Truffle', price: 4.5 },
-        { id: 'addon-ciabatta', name: 'Toasted Garlic Ciabatta', price: 2.0 },
+        { id: 'addon-truffle', name: 'Fresh Shaved Black Truffle', price: 350 },
+        { id: 'addon-ciabatta', name: 'Toasted Garlic Ciabatta', price: 150 },
       ];
     } else if (/ramen|sushi|teriyaki|tempura/i.test(q)) {
       category = 'Signature Japanese';
       description = `Expertly assembled using master technique, paired with umami-rich broths and seasonings, garnished with micro-greens, toasted sesame seeds, and scallions.`;
       dietaryTags = ['Pescatarian Friendly', 'Umami Rich'];
       spiceLevels = ['Level 0 - Non-Spicy', 'Level 1 - Tokyo Mild', 'Level 2 - Tokyo Fire'];
-      suggestedPrice = 18.0;
+      suggestedPrice = 1400;
       sizes = [
         { id: 'size-reg', name: 'Standard Bowl / Roll', priceDelta: 0 },
-        { id: 'size-mega', name: 'Deluxe Combo (+50%)', priceDelta: 5.5 },
+        { id: 'size-mega', name: 'Deluxe Combo (+50%)', priceDelta: 450 },
       ];
       addOns = [
-        { id: 'addon-egg', name: 'Ajitsuke Tamago (Soy Egg)', price: 1.75 },
-        { id: 'addon-avocado', name: 'Fresh Hass Avocado Slices', price: 2.0 },
+        { id: 'addon-egg', name: 'Ajitsuke Tamago (Soy Egg)', price: 150 },
+        { id: 'addon-avocado', name: 'Fresh Hass Avocado Slices', price: 180 },
       ];
     } else if (/taco|fajita|burrito/i.test(q)) {
       category = 'Street Tacos & Cantina';
       description = `Warm stone-ground corn tortillas piled with citrus-marinated seared meat, pico de gallo, fresh cilantro, and a drizzle of smoky charred jalapeño crema.`;
       dietaryTags = ['Halal', 'Gluten-Free'];
       spiceLevels = ['Mild Verde', 'Chipotle Medium', 'Fuego Habanero'];
-      suggestedPrice = 13.5;
+      suggestedPrice = 850;
       sizes = [
         { id: 'size-3tacos', name: 'Trio (3 Tacos)', priceDelta: 0 },
-        { id: 'size-5tacos', name: 'Fiesta Pack (5 Tacos)', priceDelta: 6.5 },
+        { id: 'size-5tacos', name: 'Fiesta Pack (5 Tacos)', priceDelta: 450 },
       ];
       addOns = [
-        { id: 'addon-guac', name: 'Fresh Hand-Mashed Guacamole', price: 3.0 },
-        { id: 'addon-chips', name: 'Warm House Tortilla Chips', price: 2.0 },
+        { id: 'addon-guac', name: 'Fresh Hand-Mashed Guacamole', price: 250 },
+        { id: 'addon-chips', name: 'Warm House Tortilla Chips', price: 180 },
       ];
     } else if (/salad|bowl|vegan|green/i.test(q)) {
       category = 'Nourish Bowls & Salads';
       description = `Vibrant organic greens and warm heritage grains tossed with seasonal crisp vegetables, toasted seeds, and an invigorating house-made cold-pressed vinaigrette.`;
       dietaryTags = ['100% Vegan', 'Gluten-Free', 'Organic'];
       spiceLevels = ['Crisp Herb Zero Spice', 'Ginger Chili Mild'];
-      suggestedPrice = 12.0;
+      suggestedPrice = 750;
       sizes = [
         { id: 'size-24oz', name: 'Regular 24oz Bowl', priceDelta: 0 },
-        { id: 'size-32oz', name: 'Power 32oz Bowl', priceDelta: 3.5 },
+        { id: 'size-32oz', name: 'Power 32oz Bowl', priceDelta: 250 },
       ];
       addOns = [
-        { id: 'addon-tofu', name: 'Crispy Baked Organic Tofu', price: 2.5 },
-        { id: 'addon-nuts', name: 'Toasted Pecans & Walnuts', price: 1.75 },
+        { id: 'addon-tofu', name: 'Crispy Baked Organic Tofu', price: 180 },
+        { id: 'addon-nuts', name: 'Toasted Pecans & Walnuts', price: 120 },
       ];
-    } else if (/cake|tiramisu|dessert|brownie|sweet|shake/i.test(q)) {
+    } else if (/cake|tiramisu|dessert|brownie|sweet|shake|kheer|chai/i.test(q)) {
       category = 'Artisanal Desserts & Sweets';
-      description = `Decadent sweet creation prepared with premium Belgian chocolate, Madagascan vanilla beans, and velvety whipped dairy cream for an indulgent finale.`;
+      description = `Decadent sweet creation prepared with rich pistachio, saffron, premium dairy, and fragrant cardamom for an authentic sweet finale.`;
       dietaryTags = ['Vegetarian'];
       spiceLevels = ['Sweet & Smooth'];
-      suggestedPrice = 8.5;
+      suggestedPrice = 450;
       sizes = [
         { id: 'size-slice', name: 'Single Serving', priceDelta: 0 },
-        { id: 'size-share', name: 'Deluxe Sharing Plate', priceDelta: 4.0 },
+        { id: 'size-share', name: 'Deluxe Sharing Plate', priceDelta: 250 },
       ];
       addOns = [
-        { id: 'addon-icecream', name: 'Scoop of Vanilla Bean Gelato', price: 2.5 },
-        { id: 'addon-berries', name: 'Fresh Mixed Wild Berries', price: 2.0 },
+        { id: 'addon-icecream', name: 'Scoop of Kulfa / Vanilla Gelato', price: 150 },
+        { id: 'addon-berries', name: 'Crushed Almonds & Silver Leaf', price: 120 },
       ];
     } else {
       // General signature dish

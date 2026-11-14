@@ -17,6 +17,7 @@ import {
 import L from 'leaflet';
 import api from '../../services/api';
 import { CartItem } from '../../store/slices/cartSlice';
+import { formatPKR } from '../../utils/currency';
 
 // Predefined prominent Pakistani landmarks
 export interface LandmarkOption {
@@ -324,7 +325,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   Checkout & Localized Delivery
                 </Dialog.Title>
                 <p className="text-xs text-slate-400">
-                  {restaurantName} • Grand Total: <strong className="text-emerald-400">${total.toFixed(2)}</strong>
+                  {restaurantName} • Grand Total: <strong className="text-emerald-400">{formatPKR(total)}</strong>
                 </p>
               </div>
             </div>
@@ -665,7 +666,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       Cash on Delivery Verified
                     </div>
                     <p className="text-xs text-slate-300 leading-relaxed">
-                      You will pay <strong className="text-white">${total.toFixed(2)}</strong> upon arrival of your food.
+                      You will pay <strong className="text-white">{formatPKR(total)}</strong> upon arrival of your food.
                       Please keep exact cash ready or let the rider know if change for large notes is required.
                     </p>
                   </div>
@@ -755,7 +756,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                           <span className="font-bold text-emerald-400">
                             Transaction Authorized Successfully
                           </span>
-                          <span className="font-mono text-white font-bold">${total.toFixed(2)}</span>
+                          <span className="font-mono text-white font-bold">{formatPKR(total)}</span>
                         </div>
                         <p className="text-slate-300">
                           Digital payment secured via {paymentMethod === 'jazzcash' ? 'JazzCash PG' : 'EasyPaisa Wallet'}.
@@ -814,7 +815,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   ) : (
                     <>
                       <ShieldCheck className="w-4 h-4 text-slate-950" />
-                      <span>Place Order • ${total.toFixed(2)}</span>
+                      <span>Place Order • {formatPKR(total)}</span>
                     </>
                   )}
                 </button>

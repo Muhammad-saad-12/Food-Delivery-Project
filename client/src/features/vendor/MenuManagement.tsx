@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import api from '../../services/api';
 import { MenuItemOption } from '../../components/customer/FoodCustomizationModal';
+import { formatPKR } from '../../utils/currency';
 
 const COMMON_CATEGORIES = [
   'All',
@@ -60,7 +61,7 @@ export const MenuManagement: React.FC<MenuManagementProps> = ({
   // Form State
   const [name, setName] = useState('');
   const [category, setCategory] = useState('Chef Specials');
-  const [price, setPrice] = useState<number>(14.5);
+  const [price, setPrice] = useState<number>(650);
   const [description, setDescription] = useState('');
   const [image, setImage] = useState('');
   const [isAvailable, setIsAvailable] = useState(true);
@@ -101,7 +102,7 @@ export const MenuManagement: React.FC<MenuManagementProps> = ({
     setEditingItem(null);
     setName('');
     setCategory('Chef Specials');
-    setPrice(14.5);
+    setPrice(650);
     setDescription('');
     setImage('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80');
     setIsAvailable(true);
@@ -154,7 +155,7 @@ export const MenuManagement: React.FC<MenuManagementProps> = ({
         if (generated.category) setCategory(generated.category);
         if (generated.dietaryTags?.length) setDietaryTags(generated.dietaryTags);
         if (generated.spiceLevels?.length) setSpiceLevels(generated.spiceLevels);
-        if (generated.suggestedPrice && (!price || price === 14.5)) {
+        if (generated.suggestedPrice && (!price || price === 650)) {
           setPrice(generated.suggestedPrice);
         }
         if (generated.sizes?.length) setSizes(generated.sizes);
@@ -180,7 +181,7 @@ export const MenuManagement: React.FC<MenuManagementProps> = ({
 
   const handleAddSize = () => {
     const id = `size-${Date.now()}`;
-    setSizes((prev) => [...prev, { id, name: 'Large Portion', priceDelta: 4.0 }]);
+    setSizes((prev) => [...prev, { id, name: 'Large Portion', priceDelta: 300 }]);
   };
 
   const handleRemoveSize = (id: string) => {
@@ -189,7 +190,7 @@ export const MenuManagement: React.FC<MenuManagementProps> = ({
 
   const handleAddAddOn = () => {
     const id = `addon-${Date.now()}`;
-    setAddOns((prev) => [...prev, { id, name: 'Extra Sauce / Cheese', price: 2.0 }]);
+    setAddOns((prev) => [...prev, { id, name: 'Extra Sauce / Raita', price: 100 }]);
   };
 
   const handleRemoveAddOn = (id: string) => {
@@ -354,7 +355,7 @@ export const MenuManagement: React.FC<MenuManagementProps> = ({
                 )}
 
                 <span className="absolute bottom-2.5 left-2.5 px-2.5 py-0.5 rounded-lg bg-slate-950/85 backdrop-blur-md border border-slate-700/80 text-xs font-mono font-extrabold text-white">
-                  ${item.price.toFixed(2)}
+                  {formatPKR(item.price)}
                 </span>
 
                 <span className="absolute bottom-2.5 right-2.5 text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-800/90 text-slate-300">
@@ -523,10 +524,10 @@ export const MenuManagement: React.FC<MenuManagementProps> = ({
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-300">Base Price ($) *</label>
+                  <label className="text-xs font-semibold text-slate-300">Base Price (Rs.) *</label>
                   <input
                     type="number"
-                    step="0.01"
+                    step="10"
                     min="0"
                     value={price}
                     onChange={(e) => setPrice(parseFloat(e.target.value) || 0)}
@@ -622,10 +623,10 @@ export const MenuManagement: React.FC<MenuManagementProps> = ({
                         placeholder="e.g. Regular Portion / 14-inch"
                         className="flex-1 bg-transparent text-xs text-white px-2 focus:outline-none"
                       />
-                      <span className="text-xs text-slate-400 font-mono">+$</span>
+                      <span className="text-xs text-slate-400 font-mono">+Rs.</span>
                       <input
                         type="number"
-                        step="0.5"
+                        step="10"
                         value={s.priceDelta}
                         onChange={(e) => {
                           const val = parseFloat(e.target.value) || 0;
@@ -684,10 +685,10 @@ export const MenuManagement: React.FC<MenuManagementProps> = ({
                         placeholder="e.g. Extra Truffle Shavings / Roghni Naan"
                         className="flex-1 bg-transparent text-xs text-white px-2 focus:outline-none"
                       />
-                      <span className="text-xs text-slate-400 font-mono">+$</span>
+                      <span className="text-xs text-slate-400 font-mono">+Rs.</span>
                       <input
                         type="number"
-                        step="0.5"
+                        step="10"
                         value={a.price}
                         onChange={(e) => {
                           const val = parseFloat(e.target.value) || 0;

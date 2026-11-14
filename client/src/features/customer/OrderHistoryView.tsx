@@ -13,6 +13,7 @@ import api from '../../services/api';
 import { InvoiceView } from './InvoiceView';
 import { ReviewModal } from '../../components/customer/ReviewModal';
 import { LiveTrackingModal } from './LiveTrackingModal';
+import { formatPKR } from '../../utils/currency';
 
 interface OrderHistoryViewProps {
   onBackToDiscovery: () => void;
@@ -213,7 +214,7 @@ export const OrderHistoryView: React.FC<OrderHistoryViewProps> = ({
                 <div className="flex items-center gap-3">
                   {getStatusBadge(order.status)}
                   <span className="text-base font-extrabold text-emerald-400 font-mono">
-                    ${order.pricing?.total?.toFixed(2)}
+                    {formatPKR(order.pricing?.total)}
                   </span>
                 </div>
               </div>
@@ -232,7 +233,7 @@ export const OrderHistoryView: React.FC<OrderHistoryViewProps> = ({
                           {item.size ? `(${item.size.name})` : ''}
                         </span>
                         <span className="font-mono text-slate-400">
-                          ${item.itemTotal?.toFixed(2)}
+                          {formatPKR(item.itemTotal)}
                         </span>
                       </div>
                     ))}

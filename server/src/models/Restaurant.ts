@@ -62,8 +62,8 @@ const restaurantSchema = new Schema<IRestaurant>(
     rating: { type: Number, default: 4.5, min: 0, max: 5 },
     reviewCount: { type: Number, default: 0 },
     deliveryTimeMin: { type: Number, default: 30 },
-    deliveryFee: { type: Number, default: 2.99 },
-    minOrder: { type: Number, default: 15.0 },
+    deliveryFee: { type: Number, default: 180 },
+    minOrder: { type: Number, default: 600 },
     priceRange: {
       type: String,
       enum: ['$', '$$', '$$$', '$$$$'],
