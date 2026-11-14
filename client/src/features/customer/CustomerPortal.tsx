@@ -14,21 +14,27 @@ import { AIChatWidget } from '../../components/chat/AIChatWidget';
 import { CheckoutModal } from './CheckoutModal';
 import { InvoiceView } from './InvoiceView';
 import { OrderHistoryView } from './OrderHistoryView';
+import { SupportModal } from '../../components/support/SupportModal';
 
 interface CustomerPortalProps {
   onSwitchToVendor?: () => void;
   onSwitchToRider?: () => void;
+  onSwitchToAdmin?: () => void;
 }
 
 export const CustomerPortal: React.FC<CustomerPortalProps> = ({
   onSwitchToVendor,
   onSwitchToRider,
+  onSwitchToAdmin,
 }) => {
   const dispatch = useDispatch();
   const cart = useSelector((state: RootState) => state.cart);
 
   // Active Main View: 'discovery' (restaurants/menu) | 'orders' (tracking & invoices)
   const [activeView, setActiveView] = useState<'discovery' | 'orders'>('discovery');
+
+  // Support Help Desk Modal State
+  const [isSupportOpen, setIsSupportOpen] = useState(false);
 
   // Selected restaurant for detail view
   const [selectedRestaurant, setSelectedRestaurant] =
@@ -74,6 +80,8 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({
         onGoOrders={() => setActiveView('orders')}
         onSwitchToVendor={onSwitchToVendor}
         onSwitchToRider={onSwitchToRider}
+        onSwitchToAdmin={onSwitchToAdmin}
+        onOpenSupport={() => setIsSupportOpen(true)}
         activeView={activeView}
         activeRestaurantName={selectedRestaurant?.name}
       />
@@ -141,6 +149,12 @@ export const CustomerPortal: React.FC<CustomerPortalProps> = ({
       <AIChatWidget
         onSelectItemForCustomization={handleOpenCustomization}
         restaurantId={selectedRestaurant?._id}
+      />
+      {/* Floating Support & Complaints Modal */}
+      <SupportModal
+        isOpen={isSupportOpen}
+        onClose={() => setIsSupportOpen(false)}
+        userType="customer"
       />
     </div>
   );

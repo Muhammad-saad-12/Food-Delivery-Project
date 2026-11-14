@@ -7,6 +7,7 @@ import {
   ArrowRightLeft,
   Store,
   Sparkles,
+  ShieldCheck,
 } from 'lucide-react';
 import api from '../../services/api';
 import { LiveOrders } from './LiveOrders';
@@ -17,11 +18,13 @@ import { RestaurantItem } from '../customer/CustomerDiscovery';
 interface VendorPortalProps {
   onSwitchToCustomer: () => void;
   onSwitchToRider?: () => void;
+  onSwitchToAdmin?: () => void;
 }
 
 export const VendorPortal: React.FC<VendorPortalProps> = ({
   onSwitchToCustomer,
   onSwitchToRider,
+  onSwitchToAdmin,
 }) => {
   const [activeTab, setActiveTab] = useState<'orders' | 'menu' | 'settings'>('orders');
   const [restaurants, setRestaurants] = useState<RestaurantItem[]>([]);
@@ -107,6 +110,19 @@ export const VendorPortal: React.FC<VendorPortalProps> = ({
                 title="Switch to rider fleet delivery view"
               >
                 <span>Rider Fleet</span>
+              </button>
+            )}
+
+            {/* Switch to Admin Governance */}
+            {onSwitchToAdmin && (
+              <button
+                type="button"
+                onClick={onSwitchToAdmin}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-xs font-bold text-indigo-300 transition shadow-sm"
+                title="Switch to Admin Governance Console"
+              >
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Admin</span>
               </button>
             )}
 

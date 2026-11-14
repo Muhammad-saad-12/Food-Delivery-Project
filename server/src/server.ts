@@ -12,6 +12,8 @@ import { menuRouter } from './routes/menu.js';
 import { aiRouter } from './routes/ai.js';
 import { orderRouter } from './routes/orders.js';
 import { reviewRouter } from './routes/reviews.js';
+import { supportRouter } from './routes/support.js';
+import { adminRouter } from './routes/admin.js';
 import { seedDatabaseIfEmpty } from './utils/seedData.js';
 
 // Load environment variables
@@ -42,6 +44,8 @@ app.use('/api/menu', menuRouter);
 app.use('/api/ai', aiRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/reviews', reviewRouter);
+app.use('/api/support', supportRouter);
+app.use('/api/admin', adminRouter);
 
 // 404 Handler
 app.use((_req: Request, res: Response) => {

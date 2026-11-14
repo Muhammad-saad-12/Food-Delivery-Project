@@ -33,6 +33,7 @@ export interface IRestaurant extends Document {
   };
   operatingHours?: IOperatingHour[];
   isOpen: boolean;
+  status: 'active' | 'pending' | 'suspended';
   vendorPhone?: string;
   vendorEmail?: string;
   dietaryTags: string[];
@@ -93,6 +94,11 @@ const restaurantSchema = new Schema<IRestaurant>(
       default: defaultOperatingHours,
     },
     isOpen: { type: Boolean, default: true },
+    status: {
+      type: String,
+      enum: ['active', 'pending', 'suspended'],
+      default: 'active',
+    },
     vendorPhone: { type: String, default: '0300-1234567' },
     vendorEmail: { type: String, default: 'vendor@restaurant.local' },
     dietaryTags: [{ type: String, trim: true }],

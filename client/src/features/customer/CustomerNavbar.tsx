@@ -3,13 +3,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { toggleCart } from '../../store/slices/cartSlice';
 import { logout, setCredentials } from '../../store/slices/authSlice';
-import { UtensilsCrossed, ShoppingBag, User, Package, Sparkles, ChefHat, Bike } from 'lucide-react';
+import { UtensilsCrossed, ShoppingBag, User, Package, Sparkles, ChefHat, Bike, ShieldCheck, LifeBuoy } from 'lucide-react';
 
 interface CustomerNavbarProps {
   onGoHome?: () => void;
   onGoOrders?: () => void;
   onSwitchToVendor?: () => void;
   onSwitchToRider?: () => void;
+  onSwitchToAdmin?: () => void;
+  onOpenSupport?: () => void;
   activeView?: 'discovery' | 'orders';
   activeRestaurantName?: string | null;
 }
@@ -19,6 +21,8 @@ export const CustomerNavbar: React.FC<CustomerNavbarProps> = ({
   onGoOrders,
   onSwitchToVendor,
   onSwitchToRider,
+  onSwitchToAdmin,
+  onOpenSupport,
   activeView = 'discovery',
   activeRestaurantName,
 }) => {
@@ -141,6 +145,32 @@ export const CustomerNavbar: React.FC<CustomerNavbarProps> = ({
             >
               <Bike className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Rider Fleet</span>
+            </button>
+          )}
+
+          {/* Switch to Executive Admin Portal */}
+          {onSwitchToAdmin && (
+            <button
+              type="button"
+              onClick={onSwitchToAdmin}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 font-bold text-xs transition"
+              title="Open Admin Governance & Analytics Console"
+            >
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Admin</span>
+            </button>
+          )}
+
+          {/* Support Ticket Modal Trigger */}
+          {onOpenSupport && (
+            <button
+              type="button"
+              onClick={onOpenSupport}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 font-semibold text-xs transition"
+              title="Help Desk & Support Inquiries"
+            >
+              <LifeBuoy className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Support</span>
             </button>
           )}
 

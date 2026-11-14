@@ -13,6 +13,7 @@ import {
   ArrowRightLeft,
   Play,
   Pause,
+  ShieldCheck,
 } from 'lucide-react';
 import L from 'leaflet';
 import api from '../../services/api';
@@ -22,11 +23,13 @@ import { fetchRoadRoute, RouteResult } from '../../services/routing';
 interface RiderPortalProps {
   onSwitchToCustomer: () => void;
   onSwitchToVendor: () => void;
+  onSwitchToAdmin?: () => void;
 }
 
 export const RiderPortal: React.FC<RiderPortalProps> = ({
   onSwitchToCustomer,
   onSwitchToVendor,
+  onSwitchToAdmin,
 }) => {
   // Rider Profile State
   const [isOnline, setIsOnline] = useState(true);
@@ -347,6 +350,19 @@ export const RiderPortal: React.FC<RiderPortalProps> = ({
             >
               <span>Kitchen Ops</span>
             </button>
+
+            {/* Switch to Admin View */}
+            {onSwitchToAdmin && (
+              <button
+                type="button"
+                onClick={onSwitchToAdmin}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-xs font-bold text-indigo-300 transition"
+                title="Switch to Admin Governance Console"
+              >
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Admin</span>
+              </button>
+            )}
           </div>
         </div>
       </header>
