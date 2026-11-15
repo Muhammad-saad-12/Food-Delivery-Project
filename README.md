@@ -11,6 +11,10 @@
 
 ---
 
+[View Live Demo](https://restaurent-system-ten.vercel.app/)
+
+
+
 ## 📌 Executive Summary
 
 **DineFlow** is an enterprise-grade, full-stack multi-portal restaurant operations and on-demand food delivery platform built with the **MERN** stack (MongoDB, Express.js, React 18, Node.js) and TypeScript. 
